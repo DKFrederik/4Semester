@@ -8,5 +8,9 @@ namespace BackEnd4Semester
 {
     public class Class1
     {
+        public int foo()
+        {
+            return 0;
+        }
     }
 }
