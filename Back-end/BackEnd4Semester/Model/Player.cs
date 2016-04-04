@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Model
 {
-    class Player : Member
+    public class Player : Member
     {
         public int Number { get; set; }
         public int GamesPlayed { get; set; }
