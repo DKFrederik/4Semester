@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Model
 {
-    class Event
+    public class Event
     {
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }

@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Model
+namespace Controller
 {
-    public class News : ContentInfo
+    class TeamCtr
     {
-        public string Picture { get; set; }
     }
 }
