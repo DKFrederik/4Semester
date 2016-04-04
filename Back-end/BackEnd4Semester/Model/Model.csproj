@@ -39,6 +39,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Administrator.cs" />
+    <Compile Include="ContentInfo.cs" />
+    <Compile Include="Event.cs" />
+    <Compile Include="Match.cs" />
+    <Compile Include="Member.cs" />
+    <Compile Include="News.cs" />
+    <Compile Include="Player.cs" />
+    <Compile Include="Team.cs" />
+    <Compile Include="Trainer.cs" />
+    <Compile Include="TrainingSession.cs" />
     <Compile Include="User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
