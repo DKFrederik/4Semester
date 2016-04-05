@@ -8,5 +8,6 @@ namespace Model
 {
     class TrainingSession : Event
     {
+        public string Trainer { get; set; }
     }
 }
