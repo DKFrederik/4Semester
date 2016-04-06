@@ -45,6 +45,7 @@
     <Compile Include="News.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Team.cs" />
+    <Compile Include="test.cs" />
     <Compile Include="TrainingSession.cs" />
     <Compile Include="User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
