@@ -6,11 +6,12 @@ using System.Threading.Tasks;
 
 namespace Model
 {
-    public class ContentInfo
+    public abstract class ContentInfo
     {
         public string Title { get; set; }
         public string Author { get; set; }
         public DateTime Date { get; set; }
         public string Content { get; set; }
+        public Boolean IsPublic { get; set; }
     }
 }

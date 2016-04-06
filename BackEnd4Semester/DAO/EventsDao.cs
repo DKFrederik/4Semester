@@ -10,32 +10,33 @@ using Model;
 
 namespace DAO
 {
-    public class NewsDao
+    public class EventsDao
     {
         private DBAccess dba;
 
-        public NewsDao()
+        public EventsDao()
         {
             this.dba = new DBAccess();
         }
 
-        public int CreateNews(News newNews)
+        public int CreateEvent(Events newEvent)
         {
             int rc = -1;
 
-            string sql = "INSERT INTO news(title, author, date, content, isPublic, picture)" +
-                "values(@title, @author, @date, @content, @isPublic, @picture)";
+            string sql = "INSERT INTO events(title, author, date, content, isPublic, startTime, endTime)" +
+                "values(@title, @author, @date, @content, @isPublic, @startTime, @endTime)";
             using (SqlCommand cmd = dba.GetDbCommand(sql))
             {
                 try
                 {
                     cmd.Parameters.Clear();
-                    cmd.Parameters.AddWithValue("@title", newNews.Title).SqlDbType = SqlDbType.VarChar;
-                    cmd.Parameters.AddWithValue("@author", newNews.Author).SqlDbType = SqlDbType.VarChar;
-                    cmd.Parameters.AddWithValue("@date", newNews.Date).SqlDbType = SqlDbType.Date;
-                    cmd.Parameters.AddWithValue("@content", newNews.Content).SqlDbType = SqlDbType.VarChar;
-                    cmd.Parameters.AddWithValue("@isPublic", newNews.IsPublic).SqlDbType = SqlDbType.Bit;
-                    cmd.Parameters.AddWithValue("@picture", newNews.Picture).SqlDbType = SqlDbType.VarChar;
+                    cmd.Parameters.AddWithValue("@title", newEvent.Title).SqlDbType = SqlDbType.VarChar;
+                    cmd.Parameters.AddWithValue("@author", newEvent.Author).SqlDbType = SqlDbType.VarChar;
+                    cmd.Parameters.AddWithValue("@date", newEvent.Date).SqlDbType = SqlDbType.Date;
+                    cmd.Parameters.AddWithValue("@content", newEvent.Content).SqlDbType = SqlDbType.VarChar;
+                    cmd.Parameters.AddWithValue("@isPublic", newEvent.IsPublic).SqlDbType = SqlDbType.Bit;
+                    cmd.Parameters.AddWithValue("@starTime", newEvent.StartTime).SqlDbType = SqlDbType.VarChar;
+                    cmd.Parameters.AddWithValue("@endTime", newEvent.EndTime).SqlDbType = SqlDbType.VarChar;
 
                     rc = cmd.ExecuteNonQuery();
                 }
@@ -47,11 +48,11 @@ namespace DAO
             return rc;
         }
 
-        public News FindNews(string title)
+        public Events FindEvent(string title)
         {
-            News foundNews = null;
+            Events foundEvents = null;
 
-            string sql = "SELECT * FROM news WHERE title=@title";
+            string sql = "SELECT * FROM events WHERE title=@title";
             using (SqlCommand cmd = dba.GetDbCommand(sql))
             {
                 cmd.Parameters.AddWithValue("@title", title).SqlDbType = SqlDbType.VarChar;
@@ -62,14 +63,15 @@ namespace DAO
                     {
                         while (reader.Read())
                         {
-                            foundNews = new News()
+                            foundEvents = new Events()
                             {
                                 Title = reader.GetString("title"),
                                 Author = reader.GetString("author"),
                                 Date = reader.GetDateTime("date"),
                                 Content = reader.GetString("content"),
                                 IsPublic = reader.GetBoolean("isPublic"),
-                                Picture = reader.GetString("picture")
+                                StartTime = reader.GetDateTime("startTime"),
+                                EndTime = reader.GetDateTime("endTime")
                             };
                         }
                     }
@@ -81,25 +83,26 @@ namespace DAO
                 cmd.Parameters.Clear();
             }
 
-            return foundNews;
+            return foundEvents;
         }
 
-        public int UpdateNews(News news, string oldTitle)
+        public int UpdateEvent(Events events, string oldTitle)
         {
             int rc = -1;
-            string sql = "UPDATE news SET title=@title, author=@author, date=@date, content=@content, isPublic=@isPublic, picture=@picture" +
+            string sql = "UPDATE events SET title=@title, author=@author, date=@date, content=@content, @isPublic=isPublic, startTime=@startTime, endTime=@endTime" +
                 "WHERE title=@oldTitle";
 
             using (SqlCommand cmd = dba.GetDbCommand(sql))
             {
                 try
                 {
-                    cmd.Parameters.AddWithValue("@title", news.Title).SqlDbType = SqlDbType.VarChar;
-                    cmd.Parameters.AddWithValue("@author", news.Author).SqlDbType = SqlDbType.VarChar;
-                    cmd.Parameters.AddWithValue("@date", news.Date).SqlDbType = SqlDbType.VarChar;
-                    cmd.Parameters.AddWithValue("@content", news.Content).SqlDbType = SqlDbType.VarChar;
-                    cmd.Parameters.AddWithValue("@isPublic", news.IsPublic).SqlDbType = SqlDbType.Bit;
-                    cmd.Parameters.AddWithValue("@picture", news.Picture).SqlDbType = SqlDbType.VarChar;
+                    cmd.Parameters.AddWithValue("@title", events.Title).SqlDbType = SqlDbType.VarChar;
+                    cmd.Parameters.AddWithValue("@author", events.Author).SqlDbType = SqlDbType.VarChar;
+                    cmd.Parameters.AddWithValue("@date", events.Date).SqlDbType = SqlDbType.VarChar;
+                    cmd.Parameters.AddWithValue("@content", events.Content).SqlDbType = SqlDbType.VarChar;
+                    cmd.Parameters.AddWithValue("@isPublic", events.IsPublic).SqlDbType = SqlDbType.Bit;
+                    cmd.Parameters.AddWithValue("@startTime", events.StartTime).SqlDbType = SqlDbType.DateTime;
+                    cmd.Parameters.AddWithValue("@endTime", events.EndTime).SqlDbType = SqlDbType.DateTime;
                     cmd.Parameters.AddWithValue("@oldTitle", oldTitle).SqlDbType = SqlDbType.VarChar;
 
                     rc = cmd.ExecuteNonQuery();
@@ -113,10 +116,10 @@ namespace DAO
             return rc;
         }
 
-        public int DeleteNews(string title)
+        public int DeleteEvent(string title)
         {
             int rc = -1;
-            string sql = "DELETE FROM news WHERE title=@title";
+            string sql = "DELETE FROM events WHERE title=@title";
 
             using (SqlCommand cmd = dba.GetDbCommand(sql))
             {
@@ -135,3 +138,4 @@ namespace DAO
         }
     }
 }
+
