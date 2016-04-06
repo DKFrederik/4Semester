@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Model
 {
-    class TrainingSession : Event
+    public class TrainingSession : Events
     {
         public string Trainer { get; set; }
     }
