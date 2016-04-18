@@ -40,11 +40,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ContentInfo.cs" />
-    <Compile Include="Event.cs" />
+    <Compile Include="Events.cs" />
     <Compile Include="Match.cs" />
     <Compile Include="News.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Team.cs" />
+    <Compile Include="test.cs" />
     <Compile Include="TrainingSession.cs" />
     <Compile Include="User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
