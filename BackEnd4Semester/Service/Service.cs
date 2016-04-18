@@ -5,15 +5,22 @@ using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.Text;
 using Model;
+using Controller;
 
 namespace Service
 {
     [ServiceBehavior(ConcurrencyMode=ConcurrencyMode.Multiple)]
     public class Service : IService 
     {
-        Player getPlayer(String email)
+        public Player getPlayer(String email)
         {
             return new Player();
+        }
+
+        public Boolean CreateUser(string username, string password, string firstname, string lastname, string email, int admPri, string type)
+        {
+            UserCtr uCtr = new UserCtr();
+            return uCtr.CreateUser(username, password, firstname, lastname, email, admPri, type);
         }
     }
 }
