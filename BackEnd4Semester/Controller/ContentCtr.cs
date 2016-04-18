@@ -22,9 +22,9 @@ namespace Controller
             return true;
         }
 
-        List<Event> getEvents(DateTime rangeStart, DateTime rangeStop)
+        List<Events> getEvents(DateTime rangeStart, DateTime rangeStop)
         {
-            return new List<Event>();
+            return new List<Events>();
         }
 
         List<News> getNews(DateTime rangeStart, DateTime rangeStop)

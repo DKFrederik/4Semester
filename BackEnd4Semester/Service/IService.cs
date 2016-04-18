@@ -15,5 +15,7 @@ namespace Service
         [OperationContract]
         Player getPlayer(String email);
 
+        [OperationContract]
+        Boolean CreateUser(string username, string password, string firstname, string lastname, string email, int admPri);
     }
 }

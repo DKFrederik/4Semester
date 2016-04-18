@@ -37,6 +37,7 @@ namespace TestDAO
                 FirstName = "TestUser",
                 LastName = "TestUser",
                 Email = "TestUser",
+                Type = "User",
                 AdminPrivilege = -1
             };
 
@@ -52,11 +53,11 @@ namespace TestDAO
 
             User user = new User
             {
-                UserName = "TestUpdateUser",
-                Password = "TestUpdateUser",
-                FirstName = "TestUpdateUser",
-                LastName = "TestUpdateUser",
-                Email = "TestUpdateUser",
+                UserName = "TestUpdateUser23151",
+                Password = "TestUpdateUser23151",
+                FirstName = "TestUpdateUser23151",
+                LastName = "TestUpdateUser23151",
+                Email = "TestUpdateUser23151@gmail.com",
                 AdminPrivilege = -1
             };
 
