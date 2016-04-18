@@ -22,8 +22,8 @@ namespace DAO
         {
             int rc = -1;
 
-            string sql = "INSERT INTO player(username, password, firstname, lastname, email, adminPrivilege, number, gamesPlayed, goals, penalties)" +
-                "values(@username, @password, @firstname, @lastname, @email, @adminPrivilege, @number, @gamesPlayed, @goals, @penalties)";
+            string sql = "INSERT INTO player(username, password, firstname, lastname, email, adminPrivilege, type, number, gamesPlayed, goals, penalties)" +
+                "values(@username, @password, @firstname, @lastname, @email, @adminPrivilege, @type, @number, @gamesPlayed, @goals, @penalties)";
             using (SqlCommand cmd = dba.GetDbCommand(sql))
             {
                 try
@@ -34,11 +34,12 @@ namespace DAO
                     cmd.Parameters.AddWithValue("@firstname", newPlayer.FirstName).SqlDbType = SqlDbType.VarChar;
                     cmd.Parameters.AddWithValue("@lastname", newPlayer.LastName).SqlDbType = SqlDbType.VarChar;
                     cmd.Parameters.AddWithValue("@email", newPlayer.Email).SqlDbType = SqlDbType.VarChar;
-                    cmd.Parameters.AddWithValue("@adminPrivilege", newPlayer.AdminPrivilege).SqlDbType = SqlDbType.TinyInt;
-                    cmd.Parameters.AddWithValue("@number", newPlayer.Number).SqlDbType = SqlDbType.TinyInt;
-                    cmd.Parameters.AddWithValue("@gamesPlayed", newPlayer.GamesPlayed).SqlDbType = SqlDbType.TinyInt;
-                    cmd.Parameters.AddWithValue("@goals", newPlayer.Goals).SqlDbType = SqlDbType.TinyInt;
-                    cmd.Parameters.AddWithValue("@penalties", newPlayer.Penalties).SqlDbType = SqlDbType.TinyInt;
+                    cmd.Parameters.AddWithValue("@adminPrivilege", newPlayer.AdminPrivilege).SqlDbType = SqlDbType.Int;
+                    cmd.Parameters.AddWithValue("@type", newPlayer.Type).SqlDbType = SqlDbType.VarChar;
+                    cmd.Parameters.AddWithValue("@number", newPlayer.Number).SqlDbType = SqlDbType.Int;
+                    cmd.Parameters.AddWithValue("@gamesPlayed", newPlayer.GamesPlayed).SqlDbType = SqlDbType.Int;
+                    cmd.Parameters.AddWithValue("@goals", newPlayer.Goals).SqlDbType = SqlDbType.Int;
+                    cmd.Parameters.AddWithValue("@penalties", newPlayer.Penalties).SqlDbType = SqlDbType.Int;
 
                     rc = cmd.ExecuteNonQuery();
                 }

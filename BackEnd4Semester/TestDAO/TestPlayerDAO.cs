@@ -32,12 +32,15 @@ namespace TestDAO
         {
             Player player = new Player
             {
+                //username, password, firstname, lastname, email, adminPrivilege, type, number, gamesPlayed, goals, penalties
+
                 UserName = "TestPlayer",
                 Password = "TestPlayer",
                 FirstName = "TestPlayer",
                 LastName = "TestPlayer",
                 Email = "TestPlayer",
                 AdminPrivilege = -1,
+                Type = "User",
                 Number = 0,
                 GamesPlayed = 0,
                 Goals = 0,

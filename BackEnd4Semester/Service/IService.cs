@@ -17,5 +17,8 @@ namespace Service
 
         [OperationContract]
         Boolean CreateUser(string username, string password, string firstname, string lastname, string email, int admPri, string type);
+
+        [OperationContract]
+        Boolean CreatePlayer(string username, string password, string firstname, string lastname, string email, int adminPrivilege, string type, int number, int gamesPlayed, int goals, int penalties);
     }
 }

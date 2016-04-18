@@ -22,5 +22,11 @@ namespace Service
             UserCtr uCtr = new UserCtr();
             return uCtr.CreateUser(username, password, firstname, lastname, email, admPri, type);
         }
+
+        public Boolean CreatePlayer(string username, string password, string firstname, string lastname, string email, int adminPrivilege, string type, int number, int gamesPlayed, int goals, int penalties)
+        {
+            PlayerCtr pCtr = new PlayerCtr();
+            return pCtr.CreatePlayer(username, password, firstname, lastname, email, adminPrivilege, type, number, gamesPlayed, goals, penalties);
+        }
     }
 }

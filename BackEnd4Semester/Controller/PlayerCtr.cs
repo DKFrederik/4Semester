@@ -10,20 +10,20 @@ namespace Controller
 {
     public class PlayerCtr
     {
-        private PlayerDao pdao;
+        private PlayerDao pDao;
 
         public PlayerCtr()
         {
-            pdao = new PlayerDao();
+            pDao = new PlayerDao();
         }
 
-        public Boolean CreatePlayer(string username, string password, string firstname, string lastname, string email, int admPri, 
+        public Boolean CreatePlayer(string username, string password, string firstname, string lastname, string email, int adminPrivilege, 
             string type, int number, int gamesPlayed, int goals, int penalties)
         {
             Boolean success = false;
-            Player p = new Player(username, password, firstname, lastname, email, admPri, type, number, gamesPlayed, goals, penalties);
+            Player p = new Player(username, password, firstname, lastname, email, adminPrivilege, type, number, gamesPlayed, goals, penalties);
 
-            if (pdao.CreatePlayer(p) != -1)
+            if (pDao.CreatePlayer(p) != -1)
             {
                 success = true;
             }
