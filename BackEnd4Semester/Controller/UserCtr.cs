@@ -29,5 +29,16 @@ namespace Controller
 
             return success;
         }
+
+        public Boolean DeleteUser(string email)
+        {
+            Boolean success = false;
+            if(udao.DeleteUser(email) != 0)
+            {
+                success = true;
+            }
+
+            return success;
+        }
     }
 }
