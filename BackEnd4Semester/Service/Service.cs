@@ -17,10 +17,10 @@ namespace Service
             return new Player();
         }
 
-        public Boolean CreateUser(string username, string password, string firstname, string lastname, string email, int admPri)
+        public Boolean CreateUser(string username, string password, string firstname, string lastname, string email, int admPri, string type)
         {
             UserCtr uCtr = new UserCtr();
-            return uCtr.CreateUser(username, password, firstname, lastname, email, admPri);
+            return uCtr.CreateUser(username, password, firstname, lastname, email, admPri, type);
         }
     }
 }

@@ -17,10 +17,10 @@ namespace Controller
             udao = new UserDAO();
         }
 
-        public Boolean CreateUser(string username, string password, string firstname, string lastname, string email, int admPri)
+        public Boolean CreateUser(string username, string password, string firstname, string lastname, string email, int admPri, string type)
         {
             Boolean success = false;
-            User u = new User(username, password, firstname, lastname, email, admPri);
+            User u = new User(username, password, firstname, lastname, email, admPri, type);
 
             if(udao.CreateUser(u) != -1)
             {
