@@ -23,8 +23,8 @@ namespace DAO
         {
             int rc = -1;
 
-            string sql = "INSERT INTO user(username, password, firstname, lastname, email, adminPrivilege)" +
-                "values(@username, @password, @firstname, @lastname, @email, @adminPrivilege)";
+            string sql = "INSERT INTO users(username, password, firstname, lastname, email, type, adminPrivilege)" +
+                " values(@username, @password, @firstname, @lastname, @email, @type, @adminPrivilege)";
             using (SqlCommand cmd = dba.GetDbCommand(sql))
             {
                 try
@@ -35,7 +35,8 @@ namespace DAO
                     cmd.Parameters.AddWithValue("@firstname", newUser.FirstName).SqlDbType = SqlDbType.VarChar;
                     cmd.Parameters.AddWithValue("@lastname", newUser.LastName).SqlDbType = SqlDbType.VarChar;
                     cmd.Parameters.AddWithValue("@email", newUser.Email).SqlDbType = SqlDbType.VarChar;
-                    cmd.Parameters.AddWithValue("@adminPrivilege", newUser.AdminPrivilege).SqlDbType = SqlDbType.TinyInt;
+                    cmd.Parameters.AddWithValue("@type", newUser.Type).SqlDbType = SqlDbType.VarChar;
+                    cmd.Parameters.AddWithValue("@adminPrivilege", newUser.AdminPrivilege).SqlDbType = SqlDbType.Int;
 
                     rc = cmd.ExecuteNonQuery();
                 }
