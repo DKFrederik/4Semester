@@ -39,6 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ContentInfoDAO.cs" />
     <Compile Include="EventsDao.cs" />
     <Compile Include="MatchDao.cs" />
     <Compile Include="NewsDao.cs" />

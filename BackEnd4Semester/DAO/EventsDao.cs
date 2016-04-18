@@ -66,7 +66,7 @@ namespace DAO
                             foundEvents = new Events()
                             {
                                 Title = reader.GetString("title"),
-                                Author = reader.GetString("author"),
+                                Author = null, //TODO reference
                                 Date = reader.GetDateTime("date"),
                                 Content = reader.GetString("content"),
                                 IsPublic = reader.GetBoolean("isPublic"),
