@@ -12,12 +12,12 @@ namespace TestDAO
     [TestClass]
     public class TestPlayerDAO
     {
-        private PlayerDAO udao;
+        private PlayerDao pdao;
 
         [TestInitialize]
         public void Initialize()
         {
-            udao = new PlayerDAO();
+            pdao = new PlayerDao();
         }
 
         [TestMethod]
@@ -25,7 +25,7 @@ namespace TestDAO
         {
             string firstname = "testFindPlayer";
             string lastname = "testFindPlayer";
-            Assert.IsNotNull(udao.FindPlayer(firstname, lastname));
+            Assert.IsNotNull(pdao.FindPlayer(firstname, lastname));
         }
         [TestMethod]
         public void TestCreatePlayer()
@@ -45,7 +45,7 @@ namespace TestDAO
             };
 
 
-            Assert.AreNotEqual(-1, udao.CreateUser(player));
+            Assert.AreNotEqual(-1, pdao.CreatePlayer(player));
         }
 
         [TestMethod]
@@ -68,7 +68,7 @@ namespace TestDAO
                 Penalties = 0
             };
 
-            Assert.AreNotEqual(-1, udao.UpdatePlayer(player, oldFirstname, oldLastname));
+            Assert.AreNotEqual(-1, pdao.UpdatePlayer(player, oldFirstname, oldLastname));
         }
 
         [TestMethod]
@@ -76,7 +76,7 @@ namespace TestDAO
         {
             string email = "TestEmail";
 
-            Assert.AreNotEqual(-1, udao.DeletePlayer(email));
+            Assert.AreNotEqual(-1, pdao.DeletePlayer(email));
         }
     }
 }

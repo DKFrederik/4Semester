@@ -9,7 +9,7 @@ using System.Data;
 
 namespace DAO
 {
-    class PlayerDao
+    public class PlayerDao
     {
         private DBAccess dba;
 
