@@ -11,6 +11,11 @@ namespace Service
     [ServiceBehavior(ConcurrencyMode=ConcurrencyMode.Multiple)]
     public class Service : IService 
     {
+        Player IService.getPlayer(string email)
+        {
+            throw new NotImplementedException();
+        }
+
         Player getPlayer(String email)
         {
             return new Player();
