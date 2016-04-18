@@ -40,7 +40,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ContentInfo.cs" />
-    <Compile Include="Event.cs" />
     <Compile Include="Events.cs" />
     <Compile Include="Match.cs" />
     <Compile Include="News.cs" />
