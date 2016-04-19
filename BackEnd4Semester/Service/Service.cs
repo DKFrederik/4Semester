@@ -28,5 +28,12 @@ namespace Service
             ContentCtr cCtr = new ContentCtr();
             return cCtr.CreateNews(title, author, date, content, isPublic, picture);
         }
+
+        public Boolean CreateMatch(string title, User author, DateTime date, string content, Boolean isPublic,
+                    DateTime startTime, DateTime endTime, string opponent, int homegoals, int awaygoals, Team team)
+        {
+            ContentCtr cCtr = new ContentCtr();
+            return cCtr.CreateMatch(title, author, date, content, isPublic, startTime, endTime, opponent, homegoals, awaygoals, team);
+        }
     }
 }

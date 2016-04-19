@@ -20,5 +20,9 @@ namespace Service
 
         [OperationContract]
         Boolean CreateNews(string title, User author, DateTime date, string content, Boolean isPublic, string picture);
+        
+        [OperationContract]
+        Boolean CreateMatch(string title, User author, DateTime date, string content, Boolean isPublic,
+            DateTime startTime, DateTime endTime, string opponent, int homegoals, int awaygoals, Team team);
     }
 }

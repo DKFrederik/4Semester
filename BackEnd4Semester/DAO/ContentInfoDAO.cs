@@ -42,7 +42,6 @@ namespace DAO
 
                         maxId = Convert.ToInt32(cmd.ExecuteScalar());
 
-                        
                     }
                     catch (Exception e)
                     {

@@ -22,11 +22,12 @@ namespace DAO
         public int CreateEvent(string title, User author, DateTime date, string content, 
                                 Boolean isPublic, DateTime startTime, DateTime endTime, string eventType)
         {
-            int rc = -1;
+            int rc = -1;    //Rowcount indicating whether or not a table was affected (nr. of rows affected)
+            int ctId = -1;  //The ID returned from grandparrent ContentInfo.
 
             ContentInfoDAO ctDao = new ContentInfoDAO();
 
-            int ctId = ctDao.CreateContentInfo(title, author, date, content, isPublic, "Event");
+            ctId = ctDao.CreateContentInfo(title, author, date, content, isPublic, "Event");
 
             string sql = "INSERT INTO event(id, starttime, endtime, eventType)" +
                 "values(@ctId, @starttime, @endtime, @eventType)";
@@ -47,7 +48,14 @@ namespace DAO
                     throw e;
                 }
             }
-            return rc;
+
+            if (rc > 0)
+            {
+                return ctId;
+            }
+            else {
+                return -1;
+            }
         }
 
         public Events FindEvent(string title)
