@@ -121,7 +121,7 @@ namespace DAO
         public int DeleteUser(string email)
         {
             int rc = -1;
-            string sql = "DELETE FROM user WHERE email=@email";
+            string sql = "DELETE FROM Users WHERE email=@email";
 
             using(SqlCommand cmd = dba.GetDbCommand(sql))
             {

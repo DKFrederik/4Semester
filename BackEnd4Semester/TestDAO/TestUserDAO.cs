@@ -67,9 +67,9 @@ namespace TestDAO
         [TestMethod]
         public void TestDeleteUser()
         {
-            string email = "TestEmail";
+            string email = "DeleteUserTest";
 
-            Assert.AreNotEqual(-1, udao.DeleteUser(email));
+            Assert.IsTrue(0 < udao.DeleteUser(email));
         }
     }
 }
