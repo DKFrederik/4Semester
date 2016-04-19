@@ -30,11 +30,6 @@ namespace Controller
             return success;
         }
 
-        public User FindUser(string firstname, string lastname)
-        {
-            return udao.FindUser(firstname, lastname);
-        }
-
         public Boolean DeleteUser(string email)
         {
             Boolean success = false;
@@ -44,6 +39,11 @@ namespace Controller
             }
 
             return success;
+        }
+
+        public User FindUser(string firstname, string lastname)
+        {
+            return udao.FindUser(firstname, lastname);
         }
     }
 }
