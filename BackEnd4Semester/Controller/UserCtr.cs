@@ -29,5 +29,10 @@ namespace Controller
 
             return success;
         }
+
+        public User FindUser(string firstname, string lastname)
+        {
+            return udao.FindUser(firstname, lastname);
+        }
     }
 }

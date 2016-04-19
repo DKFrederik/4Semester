@@ -22,5 +22,11 @@ namespace Service
             UserCtr uCtr = new UserCtr();
             return uCtr.CreateUser(username, password, firstname, lastname, email, admPri, type);
         }
+
+        public User FindUser(string firstname, string lastname)
+        {
+            UserCtr uCtr = new UserCtr();
+            return uCtr.FindUser(firstname, lastname);
+        }
     }
 }

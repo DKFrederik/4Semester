@@ -52,7 +52,7 @@ namespace DAO
         {
             User foundUser = null;
 
-            string sql = "SELECT * FROM user WHERE firstname=@firstname AND lastname=@lastname";
+            string sql = "SELECT * FROM Users WHERE firstname=@firstname AND lastname=@lastname";
             using (SqlCommand cmd = dba.GetDbCommand(sql))
             {
                 cmd.Parameters.AddWithValue("@firstname", firstname).SqlDbType = SqlDbType.VarChar;
@@ -72,7 +72,8 @@ namespace DAO
                                 FirstName = reader.GetString("firstname"),
                                 LastName = reader.GetString("lastname"),
                                 Email = reader.GetString("email"),
-                                AdminPrivilege = reader.GetInt32("adminPrivilege")
+                                AdminPrivilege = reader.GetInt32("adminPrivilege"),
+                                Type = reader.GetString("type")
                             };
                         }
                     }
