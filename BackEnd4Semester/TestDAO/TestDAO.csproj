@@ -58,6 +58,7 @@
     <Compile Include="TestPlayerDAO.cs" />
     <Compile Include="TestContentInfoDAO.cs" />
     <Compile Include="TestNewsDao.cs" />
+    <Compile Include="TestEventDao.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DAO\DAO.csproj">

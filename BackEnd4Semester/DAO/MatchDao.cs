@@ -38,7 +38,7 @@ namespace DAO
                     cmd.Parameters.AddWithValue("@starTime", newMatch.StartTime).SqlDbType = SqlDbType.VarChar;
                     cmd.Parameters.AddWithValue("@endTime", newMatch.EndTime).SqlDbType = SqlDbType.VarChar;
                     cmd.Parameters.AddWithValue("@opponent", newMatch.Opponent).SqlDbType = SqlDbType.VarChar;
-                    cmd.Parameters.AddWithValue("@matchScore", newMatch.MatchScore).SqlDbType = SqlDbType.VarChar;
+                    cmd.Parameters.AddWithValue("@matchScore", newMatch.HomeGoal).SqlDbType = SqlDbType.VarChar;
 
                     rc = cmd.ExecuteNonQuery();
                 }
@@ -75,7 +75,7 @@ namespace DAO
                                 StartTime = reader.GetDateTime("startTime"),
                                 EndTime = reader.GetDateTime("endTime"),
                                 Opponent = reader.GetString("opponent"),
-                                MatchScore = reader.GetString("matchScore")
+                                HomeGoal = reader.GetInt32("matchScore")
                             };
                         }
                     }
@@ -108,7 +108,7 @@ namespace DAO
                     cmd.Parameters.AddWithValue("@startTime", match.StartTime).SqlDbType = SqlDbType.VarChar;
                     cmd.Parameters.AddWithValue("@endTime", match.EndTime).SqlDbType = SqlDbType.VarChar;
                     cmd.Parameters.AddWithValue("@opponent", match.Opponent).SqlDbType = SqlDbType.VarChar;
-                    cmd.Parameters.AddWithValue("@matchScore", match.MatchScore).SqlDbType = SqlDbType.VarChar;
+                    cmd.Parameters.AddWithValue("@matchScore", match.HomeGoal).SqlDbType = SqlDbType.VarChar;
                     cmd.Parameters.AddWithValue("@oldTitle", oldTitle).SqlDbType = SqlDbType.VarChar;
 
                     rc = cmd.ExecuteNonQuery();
