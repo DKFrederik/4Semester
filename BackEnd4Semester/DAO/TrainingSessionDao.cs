@@ -67,7 +67,7 @@ namespace DAO
                             foundTrainingSession = new TrainingSession()
                             {
                                 Title = reader.GetString("title"),
-                                Author = reader.GetString("author"),
+                                //Author = reader.GetInt32("author"), TODO
                                 Date = reader.GetDateTime("date"),
                                 Content = reader.GetString("content"),
                                 IsPublic = reader.GetBoolean("isPublic"),

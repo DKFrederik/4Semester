@@ -13,13 +13,13 @@ namespace TestDAO
         [TestInitialize]
         public void Initialize()
         {
-            ctDAO = new UserDAO();
+            ctDAO = new ContentInfoDAO();
         }
 
         [TestMethod]
         public void TestCreateContentInfo()
         {
-            Assert.AreNotEqual(-1, ctDAO.CreateContentInfo("testString", new User(){Email = "test@email.com"}, DateTime.Now, "testContent", true, "news"));
+            Assert.AreNotEqual(-1, ctDAO.CreateContentInfo("testString", new User() { Email = "ContentTestUser" }, DateTime.Now, "testContent", true, "news"));
         }
     }
 }

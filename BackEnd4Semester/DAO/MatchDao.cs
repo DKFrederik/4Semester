@@ -68,7 +68,7 @@ namespace DAO
                             foundMatch = new Match()
                             {
                                 Title = reader.GetString("title"),
-                                Author = reader.GetString("author"),
+                                //Author = reader.GetString("author"), TODO
                                 Date = reader.GetDateTime("date"),
                                 Content = reader.GetString("content"),
                                 IsPublic = reader.GetBoolean("isPublic"),

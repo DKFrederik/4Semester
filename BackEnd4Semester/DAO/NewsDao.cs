@@ -8,6 +8,7 @@ using System.Data.SqlClient;
 using System.Data;
 using Model;
 
+
 namespace DAO
 {
     public class NewsDao
@@ -32,18 +33,14 @@ namespace DAO
 
             int ctId = ctDao.CreateContentInfo(news.Title, news.Author, news.Date, news.Content, news.IsPublic, "news");
 
-            string sql = "INSERT INTO news(title, author, date, content, isPublic, picture)" +
-                "values(@title, @author, @date, @content, @isPublic, @picture)";
+            string sql = "INSERT INTO news(id, pictureURL)" +
+                "values(@ctId, @picture)";
             using (SqlCommand cmd = dba.GetDbCommand(sql))
             {
                 try
                 {
                     cmd.Parameters.Clear();
-                    cmd.Parameters.AddWithValue("@title", news.Title).SqlDbType = SqlDbType.VarChar;
-                    cmd.Parameters.AddWithValue("@author", news.Author).SqlDbType = SqlDbType.VarChar;
-                    cmd.Parameters.AddWithValue("@date", news.Date).SqlDbType = SqlDbType.Date;
-                    cmd.Parameters.AddWithValue("@content", news.Content).SqlDbType = SqlDbType.VarChar;
-                    cmd.Parameters.AddWithValue("@isPublic", news.IsPublic).SqlDbType = SqlDbType.Bit;
+                    cmd.Parameters.AddWithValue("@ctId", ctId).SqlDbType = SqlDbType.Int;
                     cmd.Parameters.AddWithValue("@picture", news.Picture).SqlDbType = SqlDbType.VarChar;
 
                     rc = cmd.ExecuteNonQuery();
