@@ -17,5 +17,8 @@ namespace Service
 
         [OperationContract]
         Boolean CreateUser(string username, string password, string firstname, string lastname, string email, int admPri, string type);
+
+        [OperationContract]
+        Boolean CreateNews(string title, User author, DateTime date, string content, Boolean isPublic, string picture);
     }
 }

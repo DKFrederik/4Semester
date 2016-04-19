@@ -22,5 +22,11 @@ namespace Service
             UserCtr uCtr = new UserCtr();
             return uCtr.CreateUser(username, password, firstname, lastname, email, admPri, type);
         }
+
+        public Boolean CreateNews(string title, User author, DateTime date, string content, Boolean isPublic, string picture)
+        {
+            ContentCtr cCtr = new ContentCtr();
+            return cCtr.CreateNews(title, author, date, content, isPublic, picture);
+        }
     }
 }

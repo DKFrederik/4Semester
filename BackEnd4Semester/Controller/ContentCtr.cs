@@ -4,14 +4,28 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Model;
+using DAO;
 
 
 namespace Controller
 {
-    class ContentCtr
+    public class ContentCtr
     {
-        Boolean createNews(){
-            return true;
+        NewsDao nDao;
+        public ContentCtr()
+        {
+            nDao = new NewsDao();
+        }
+        public Boolean CreateNews(string title, User author, DateTime date, string content, Boolean isPublic, string picture)
+        {
+            Boolean succes = false;
+            News n = new News(title, author, date, content, isPublic, picture);
+
+            if (0 < nDao.CreateNews(n))
+            {
+                succes = true;
+            }
+            return succes;
         }
 
         Boolean createTraningSession(){
