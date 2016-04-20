@@ -52,6 +52,9 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="TestEventDao.cs" />
+    <Compile Include="TestMatchDao.cs" />
+    <Compile Include="TestNewsDao.cs" />
     <Compile Include="TestUserDAO.cs" />
     <Compile Include="TestDBAccess.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
