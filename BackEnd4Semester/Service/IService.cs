@@ -19,6 +19,13 @@ namespace Service
         Boolean CreateUser(string username, string password, string firstname, string lastname, string email, int admPri, string type);
 
         [OperationContract]
+        Boolean CreateNews(string title, User author, DateTime date, string content, Boolean isPublic, string picture);
+        
+        [OperationContract]
+        Boolean CreateMatch(string title, User author, DateTime date, string content, Boolean isPublic,
+            DateTime startTime, DateTime endTime, string opponent, int homegoals, int awaygoals, Team team);
+
+        [OperationContract]
         Boolean DeleteUser(string email);
 
         [OperationContract]

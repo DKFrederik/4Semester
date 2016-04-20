@@ -8,6 +8,7 @@ using System.Data.SqlClient;
 using System.Data;
 using Model;
 
+
 namespace DAO
 {
     public class NewsDao
@@ -19,23 +20,28 @@ namespace DAO
             this.dba = new DBAccess();
         }
 
-        public int CreateNews(News newNews)
+        /// <summary>
+        /// Creates a new tubble in the database 
+        /// </summary>
+        /// <param name="newNews"></param>
+        /// <returns></returns>
+        public int CreateNews(News news)
         {
             int rc = -1;
 
-            string sql = "INSERT INTO news(title, author, date, content, isPublic, picture)" +
-                "values(@title, @author, @date, @content, @isPublic, @picture)";
+            ContentInfoDAO ctDao = new ContentInfoDAO();
+
+            int ctId = ctDao.CreateContentInfo(news.Title, news.Author, news.Date, news.Content, news.IsPublic, "news");
+
+            string sql = "INSERT INTO news(id, pictureURL)" +
+                "values(@ctId, @picture)";
             using (SqlCommand cmd = dba.GetDbCommand(sql))
             {
                 try
                 {
                     cmd.Parameters.Clear();
-                    cmd.Parameters.AddWithValue("@title", newNews.Title).SqlDbType = SqlDbType.VarChar;
-                    cmd.Parameters.AddWithValue("@author", newNews.Author).SqlDbType = SqlDbType.VarChar;
-                    cmd.Parameters.AddWithValue("@date", newNews.Date).SqlDbType = SqlDbType.Date;
-                    cmd.Parameters.AddWithValue("@content", newNews.Content).SqlDbType = SqlDbType.VarChar;
-                    cmd.Parameters.AddWithValue("@isPublic", newNews.IsPublic).SqlDbType = SqlDbType.Bit;
-                    cmd.Parameters.AddWithValue("@picture", newNews.Picture).SqlDbType = SqlDbType.VarChar;
+                    cmd.Parameters.AddWithValue("@ctId", ctId).SqlDbType = SqlDbType.Int;
+                    cmd.Parameters.AddWithValue("@picture", news.Picture).SqlDbType = SqlDbType.VarChar;
 
                     rc = cmd.ExecuteNonQuery();
                 }
@@ -65,7 +71,7 @@ namespace DAO
                             foundNews = new News()
                             {
                                 Title = reader.GetString("title"),
-                                Author = reader.GetString("author"),
+                                Author = null,  //TODO reference
                                 Date = reader.GetDateTime("date"),
                                 Content = reader.GetString("content"),
                                 IsPublic = reader.GetBoolean("isPublic"),

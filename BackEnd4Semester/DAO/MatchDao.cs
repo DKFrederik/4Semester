@@ -19,26 +19,27 @@ namespace DAO
             this.dba = new DBAccess();
         }
 
-        public int CreateMatch(Match newMatch)
+        public int CreateMatch(Match m)
         {
             int rc = -1;
 
-            string sql = "INSERT INTO match(title, author, date, content, isPublic, startTime, endTime, opponent, matchScore)" +
-                "values(@title, @author, @date, @content, @isPublic, @startTime, @endTime, @opponent, @matchScore)";
+            EventsDao eDao = new EventsDao();
+
+            int eId = eDao.CreateEvent(m.Title, m.Author, m.Date, m.Content,
+                                m.IsPublic, m.StartTime, m.EndTime, "match");
+
+            string sql = "INSERT INTO match(id, teamid, opponent, homegoals, awaygoals)" +
+                "values(@id, (select id FROM Team where name = @teamname), @opponent, @homegoals, @awaygoals)";
             using (SqlCommand cmd = dba.GetDbCommand(sql))
             {
                 try
                 {
                     cmd.Parameters.Clear();
-                    cmd.Parameters.AddWithValue("@title", newMatch.Title).SqlDbType = SqlDbType.VarChar;
-                    cmd.Parameters.AddWithValue("@author", newMatch.Author).SqlDbType = SqlDbType.VarChar;
-                    cmd.Parameters.AddWithValue("@date", newMatch.Date).SqlDbType = SqlDbType.Date;
-                    cmd.Parameters.AddWithValue("@content", newMatch.Content).SqlDbType = SqlDbType.VarChar;
-                    cmd.Parameters.AddWithValue("@isPublic", newMatch.IsPublic).SqlDbType = SqlDbType.Bit;
-                    cmd.Parameters.AddWithValue("@starTime", newMatch.StartTime).SqlDbType = SqlDbType.VarChar;
-                    cmd.Parameters.AddWithValue("@endTime", newMatch.EndTime).SqlDbType = SqlDbType.VarChar;
-                    cmd.Parameters.AddWithValue("@opponent", newMatch.Opponent).SqlDbType = SqlDbType.VarChar;
-                    cmd.Parameters.AddWithValue("@matchScore", newMatch.MatchScore).SqlDbType = SqlDbType.VarChar;
+                    cmd.Parameters.AddWithValue("@id", eId).SqlDbType = SqlDbType.Int;
+                    cmd.Parameters.AddWithValue("@teamname", m.Team.Name).SqlDbType = SqlDbType.VarChar;
+                    cmd.Parameters.AddWithValue("@opponent", m.Opponent).SqlDbType = SqlDbType.VarChar;
+                    cmd.Parameters.AddWithValue("@homegoals", m.HomeGoal).SqlDbType = SqlDbType.Int;
+                    cmd.Parameters.AddWithValue("@awaygoals", m.AwayGoal).SqlDbType = SqlDbType.Int;
 
                     rc = cmd.ExecuteNonQuery();
                 }
@@ -68,14 +69,14 @@ namespace DAO
                             foundMatch = new Match()
                             {
                                 Title = reader.GetString("title"),
-                                Author = reader.GetString("author"),
+                                //Author = reader.GetString("author"), TODO
                                 Date = reader.GetDateTime("date"),
                                 Content = reader.GetString("content"),
                                 IsPublic = reader.GetBoolean("isPublic"),
                                 StartTime = reader.GetDateTime("startTime"),
                                 EndTime = reader.GetDateTime("endTime"),
                                 Opponent = reader.GetString("opponent"),
-                                MatchScore = reader.GetString("matchScore")
+                                HomeGoal = reader.GetInt32("matchScore")
                             };
                         }
                     }
@@ -108,7 +109,7 @@ namespace DAO
                     cmd.Parameters.AddWithValue("@startTime", match.StartTime).SqlDbType = SqlDbType.VarChar;
                     cmd.Parameters.AddWithValue("@endTime", match.EndTime).SqlDbType = SqlDbType.VarChar;
                     cmd.Parameters.AddWithValue("@opponent", match.Opponent).SqlDbType = SqlDbType.VarChar;
-                    cmd.Parameters.AddWithValue("@matchScore", match.MatchScore).SqlDbType = SqlDbType.VarChar;
+                    cmd.Parameters.AddWithValue("@matchScore", match.HomeGoal).SqlDbType = SqlDbType.VarChar;
                     cmd.Parameters.AddWithValue("@oldTitle", oldTitle).SqlDbType = SqlDbType.VarChar;
 
                     rc = cmd.ExecuteNonQuery();
