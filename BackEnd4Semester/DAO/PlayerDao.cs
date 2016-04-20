@@ -50,15 +50,17 @@ namespace DAO
             return rc;
         }
 
-        public User FindPlayer(string firstname, string lastname)
+        public User FindPlayer(string email)
         {
             User foundPlayer = null;
 
-            string sql = "SELECT * FROM player WHERE firstname=@firstname AND lastname=@lastname";
+            string sql = "select p.id, p.number, p.gamesPlayed, p.goals, p.penalties, "
+                + "u.adminPrivilege, u.email, u.firstname, u.lastname, u.type, u.username "
+                + "FROM Player p join Users u on p.id = u.id where u.email = @email";
+
             using (SqlCommand cmd = dba.GetDbCommand(sql))
             {
-                cmd.Parameters.AddWithValue("@firstname", firstname).SqlDbType = SqlDbType.VarChar;
-                cmd.Parameters.AddWithValue("@lastname", lastname).SqlDbType = SqlDbType.VarChar;
+                cmd.Parameters.AddWithValue("@email", email).SqlDbType = SqlDbType.VarChar;
 
                 using (SqlDataReader reader = cmd.ExecuteReader())
                 {
@@ -70,7 +72,6 @@ namespace DAO
                             {
                                 Id = reader.GetInt32("id"),
                                 UserName = reader.GetString("username"),
-                                Password = reader.GetString("password"),
                                 FirstName = reader.GetString("firstname"),
                                 LastName = reader.GetString("lastname"),
                                 Email = reader.GetString("email"),

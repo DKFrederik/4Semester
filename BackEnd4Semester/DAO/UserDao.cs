@@ -67,7 +67,6 @@ namespace DAO
                             {
                                 Id = reader.GetInt32("id"),
                                 UserName = reader.GetString("username"),
-                                Password = reader.GetString("password"),
                                 FirstName = reader.GetString("firstname"),
                                 LastName = reader.GetString("lastname"),
                                 Email = reader.GetString("email"),
