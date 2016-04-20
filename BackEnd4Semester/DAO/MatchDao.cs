@@ -103,7 +103,7 @@ namespace DAO
             UserDAO uDao = new UserDAO();
             TeamDao tDao = new TeamDao();
 
-            Match m;
+            Match m = null;
 
             string sql = "SELECT c.title, c.creatorId, c.date, c.content, c.IsPublic, e.startTime, e.endTime, m.opponent, m.homegoals, m.awaygoals, m.teamId FROM match m join Event e on m.id = e.id join ContentInfo c on c.id = e.id "
                 + "where c.id = @id";
