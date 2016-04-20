@@ -11,23 +11,49 @@ namespace Controller
     public class UserCtr
     {
         private UserDAO udao;
+        private PlayerDao pDao;
 
         public UserCtr()
         {
             udao = new UserDAO();
+            pDao = new PlayerDao();
         }
 
         public Boolean CreateUser(string username, string password, string firstname, string lastname, string email, int admPri, string type)
         {
             Boolean success = false;
-            User u = new User(username, password, firstname, lastname, email, admPri, type);
 
-            if(udao.CreateUser(u) != -1)
+            if(udao.CreateUser(false, username, password, firstname, lastname, email, admPri, type) != -1)
             {
                 success = true;
             }
 
             return success;
+        }
+
+        public Boolean CreatePlayer(string username, string password, string firstname, string lastname, string email, int admPri, string type, int number, int gamesplayed, int goals, int penalties)
+        {
+            bool success = false;
+
+            if (pDao.CreatePlayer(username, password, firstname, lastname, email, admPri, type, number, gamesplayed, goals, penalties) > 0)
+            {
+                success = true;
+            }
+
+            return success;
+
+        }
+
+        public bool DeletePlayer(string email)
+        {
+            bool suc = false;
+
+            if (pDao.DeletePlayer(email) > 0)
+            {
+                suc = true;
+            }
+
+            return suc;
         }
 
         public Boolean DeleteUser(string email)
@@ -56,6 +82,11 @@ namespace Controller
             }
 
             return success;
+        }
+
+        public Player FindPlayer(string email)
+        {
+            return pDao.FindPlayer(email);
         }
     }
 }

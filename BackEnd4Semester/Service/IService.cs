@@ -13,8 +13,13 @@ namespace Service
     public interface IService
     {
         [OperationContract]
-        Player getPlayer(String email);
+        Player FindPlayer(String email);
 
+        [OperationContract]
+        Boolean DeletePlayer(string email);
+
+        [OperationContract]
+        Boolean CreatePlayer(string username, string password, string firstname, string lastname, string email, int admPri, string type, int number, int gamesplayed, int goals, int penalties);
         [OperationContract]
         Boolean CreateUser(string username, string password, string firstname, string lastname, string email, int admPri, string type);
 
@@ -33,5 +38,8 @@ namespace Service
 
         [OperationContract]
         Boolean UpdateUser(string oldFn, string oldLn, string username, string password, string firstname, string lastname, string email, int admPri, string type);
+
+        [OperationContract]
+        Player FindPlayer(string email);
     }
 }

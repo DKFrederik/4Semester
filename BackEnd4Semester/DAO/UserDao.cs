@@ -19,33 +19,41 @@ namespace DAO
             this.dba = new DBAccess();
         }
 
-        public int CreateUser(User newUser)
+        public int CreateUser(bool playerCreation, string username, string password, string firstname, string lastname, string email, int admPri, string type)
         {
-            int rc = -1;
+            int res = -1;
 
             string sql = "INSERT INTO users(username, password, firstname, lastname, email, type, adminPrivilege)" +
-                " values(@username, @password, @firstname, @lastname, @email, @type, @adminPrivilege)";
+                " values(@username, @password, @firstname, @lastname, @email, @type, @adminPrivilege); Select Scope_Identity()";
+
             using (SqlCommand cmd = dba.GetDbCommand(sql))
             {
                 try
                 {
                     cmd.Parameters.Clear();
-                    cmd.Parameters.AddWithValue("@username", newUser.UserName).SqlDbType = SqlDbType.VarChar;
-                    cmd.Parameters.AddWithValue("@password", newUser.Password).SqlDbType = SqlDbType.VarChar;
-                    cmd.Parameters.AddWithValue("@firstname", newUser.FirstName).SqlDbType = SqlDbType.VarChar;
-                    cmd.Parameters.AddWithValue("@lastname", newUser.LastName).SqlDbType = SqlDbType.VarChar;
-                    cmd.Parameters.AddWithValue("@email", newUser.Email).SqlDbType = SqlDbType.VarChar;
-                    cmd.Parameters.AddWithValue("@type", newUser.Type).SqlDbType = SqlDbType.VarChar;
-                    cmd.Parameters.AddWithValue("@adminPrivilege", newUser.AdminPrivilege).SqlDbType = SqlDbType.Int;
+                    cmd.Parameters.AddWithValue("@username", username).SqlDbType = SqlDbType.VarChar;
+                    cmd.Parameters.AddWithValue("@password", password).SqlDbType = SqlDbType.VarChar;
+                    cmd.Parameters.AddWithValue("@firstname", firstname).SqlDbType = SqlDbType.VarChar;
+                    cmd.Parameters.AddWithValue("@lastname", lastname).SqlDbType = SqlDbType.VarChar;
+                    cmd.Parameters.AddWithValue("@email", email).SqlDbType = SqlDbType.VarChar;
+                    cmd.Parameters.AddWithValue("@type", type).SqlDbType = SqlDbType.VarChar;
+                    cmd.Parameters.AddWithValue("@adminPrivilege", admPri).SqlDbType = SqlDbType.Int;
 
-                    rc = cmd.ExecuteNonQuery();
+                    if (playerCreation)
+                    {
+                        res = Convert.ToInt32(cmd.ExecuteScalar());
+                    }
+                    else
+                    {
+                        res = cmd.ExecuteNonQuery();
+                    }
                 }
                 catch (Exception e)
                 {
                     throw e;
                 }
             }
-            return rc;
+            return res;
         }
 
         public User FindUser(string email)

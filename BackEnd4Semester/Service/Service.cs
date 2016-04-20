@@ -12,9 +12,22 @@ namespace Service
     [ServiceBehavior(ConcurrencyMode=ConcurrencyMode.Multiple)]
     public class Service : IService 
     {
-        public Player getPlayer(String email)
+        public Player FindPlayer(String email)
         {
-            return new Player();
+            UserCtr uCtr = new UserCtr();
+            return uCtr.FindPlayer(email);
+        }
+
+        public Boolean DeletePlayer(string email)
+        {
+            UserCtr uCtr = new UserCtr();
+            return uCtr.DeletePlayer(email);
+        }
+
+        public Boolean CreatePlayer(string username, string password, string firstname, string lastname, string email, int admPri, string type, int number, int gamesplayed, int goals, int penalties)
+        {
+            UserCtr uCtr = new UserCtr();
+            return uCtr.CreatePlayer(username, password, firstname, lastname, email, admPri, type, number, gamesplayed, goals, penalties);
         }
 
         public Boolean CreateUser(string username, string password, string firstname, string lastname, string email, int admPri, string type)
@@ -52,6 +65,12 @@ namespace Service
         {
             UserCtr uCtr = new UserCtr();
             return uCtr.UpdateUser(oldFn, oldLn, username, password, firstname, lastname, email, admPri, type);
+        }
+
+        public Player FindPlayer(string email)
+        {
+            UserCtr uCtr = new UserCtr();
+            return uCtr.FindPlayer(email);
         }
     }
 }
