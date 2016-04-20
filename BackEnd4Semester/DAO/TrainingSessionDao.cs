@@ -19,9 +19,10 @@ namespace DAO
             this.dba = new DBAccess();
         }
 
-        public int CreateTrainingSession(TrainingSession newTrainingSession)
+        public Boolean CreateTrainingSession(TrainingSession newTrainingSession)
         {
             int rc = -1;
+            bool success = false;
 
             string sql = "INSERT INTO trainingSession(title, author, date, content, isPublic, startTime, endTime, trainer)" +
                 "values(@title, @author, @date, @content, @isPublic, @startTime, @endTime, @trainer)";
@@ -40,13 +41,14 @@ namespace DAO
                     cmd.Parameters.AddWithValue("@trainer", newTrainingSession.Trainer).SqlDbType = SqlDbType.VarChar;
 
                     rc = cmd.ExecuteNonQuery();
+                    success = true;
                 }
                 catch (Exception e)
                 {
                     throw e;
                 }
             }
-            return rc;
+            return success;
         }
 
         public TrainingSession FindTrainingSession(string title)

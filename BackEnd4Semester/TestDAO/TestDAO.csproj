@@ -60,6 +60,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestPlayerDAO.cs" />
     <Compile Include="TestContentInfoDAO.cs" />
+    <Compile Include="TestTrainingSessionDAO.cs" />
+    <Compile Include="TestTeamDAO.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DAO\DAO.csproj">
