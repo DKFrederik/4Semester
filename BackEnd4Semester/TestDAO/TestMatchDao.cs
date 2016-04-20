@@ -38,6 +38,12 @@ namespace TestDAO
         }
 
         [TestMethod]
+        public void TestFindMatches()
+        {
+            Assert.IsFalse(mDao.FindMatches(new DateTime(2016, 04, 20)).Count == 0);
+        }
+
+        [TestMethod]
         public void TestFindMatch()
         {
             Assert.IsFalse(mDao.FindMatches(new DateTime(2016, 04, 20)).Count == 0);

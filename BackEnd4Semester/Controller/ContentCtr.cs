@@ -32,7 +32,7 @@ namespace Controller
             return succes;
         }
 
-        public bool CreateTrainingSession(string title, string authorEmail, DateTime date, string content, bool isPulic, DateTime startTime, DateTime endTime, string trainer){
+        public Boolean CreateTrainingSession(string title, string authorEmail, DateTime date, string content, bool isPulic, DateTime startTime, DateTime endTime, string trainer){
             User author = uCtr.FindUser(authorEmail);
             TrainingSession newTs = new TrainingSession(title, author, date, content, isPulic, startTime, endTime, trainer);
             return trainingSessionDao.CreateTrainingSession(newTs);

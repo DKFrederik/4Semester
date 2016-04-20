@@ -87,6 +87,44 @@ namespace DAO
             return foundUser;
         }
 
+        public User FindUser(int id)
+        {
+            User foundUser = null;
+
+            string sql = "SELECT * FROM Users WHERE id=@id";
+            using (SqlCommand cmd = dba.GetDbCommand(sql))
+            {
+                cmd.Parameters.AddWithValue("@id", id).SqlDbType = SqlDbType.Int;
+
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    try
+                    {
+                        while (reader.Read())
+                        {
+                            foundUser = new User()
+                            {
+                                Id = reader.GetInt32("id"),
+                                UserName = reader.GetString("username"),
+                                Password = reader.GetString("password"),
+                                FirstName = reader.GetString("firstname"),
+                                LastName = reader.GetString("lastname"),
+                                Email = reader.GetString("email"),
+                                AdminPrivilege = reader.GetInt32("adminPrivilege"),
+                                Type = reader.GetString("type")
+                            };
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        throw e;
+                    }
+                }
+                cmd.Parameters.Clear();
+            }
+            return foundUser;
+        }
+
         public int UpdateUser(User user, string oldFirstname, string oldLastname)
         {
             int rc = -1;
