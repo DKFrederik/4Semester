@@ -51,14 +51,16 @@ namespace DAO
             return rc;
         }
 
-        public Match FindMatch(string title)
+        public List<Match> FindMatches(DateTime date)
         {
-            Match foundMatch = null;
+            List<Match> matches = new List<Match>();
 
-            string sql = "SELECT * FROM match WHERE title=@title";
+            string sql = "SELECT * FROM match m join Event e on m.id = e.id join ContentInfo c on c.id = e.id "
+                + "where c.date = @date";
+
             using (SqlCommand cmd = dba.GetDbCommand(sql))
             {
-                cmd.Parameters.AddWithValue("@title", title).SqlDbType = SqlDbType.VarChar;
+                cmd.Parameters.AddWithValue("@date", date).SqlDbType = SqlDbType.VarChar;
 
                 using (SqlDataReader reader = cmd.ExecuteReader())
                 {
@@ -66,8 +68,7 @@ namespace DAO
                     {
                         while (reader.Read())
                         {
-                            foundMatch = new Match()
-                            {
+                            Match m = new Match(){
                                 Title = reader.GetString("title"),
                                 //Author = reader.GetString("author"), TODO
                                 Date = reader.GetDateTime("date"),
@@ -77,7 +78,10 @@ namespace DAO
                                 EndTime = reader.GetDateTime("endTime"),
                                 Opponent = reader.GetString("opponent"),
                                 HomeGoal = reader.GetInt32("matchScore")
+                                //Team = reader.GetString("team")   TODO
                             };
+                            
+                            matches.Add(m);
                         }
                     }
                     catch (Exception e)
@@ -88,7 +92,7 @@ namespace DAO
                 cmd.Parameters.Clear();
             }
 
-            return foundMatch;
+            return matches;
         }
 
         public int UpdateMatch(Match match, string oldTitle)
