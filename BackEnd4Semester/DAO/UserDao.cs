@@ -91,7 +91,7 @@ namespace DAO
         public int UpdateUser(User user, string oldFirstname, string oldLastname)
         {
             int rc = -1;
-            string sql = "UPDATE user SET username=@username, password=@password, firstname=@firstname, lastname=@lastname, email=@email, adminPrivilege=@admindPrivilege " +
+            string sql = "UPDATE Users SET username=@username, password=@password, firstname=@firstname, lastname=@lastname, email=@email, adminPrivilege=@adminPrivilege, type=@type " +
                 "WHERE firstname=@oldFirstname AND lastname=@oldLastname";
 
             using (SqlCommand cmd = dba.GetDbCommand(sql))
@@ -103,10 +103,11 @@ namespace DAO
                     cmd.Parameters.AddWithValue("@firstname", user.FirstName).SqlDbType = SqlDbType.VarChar;
                     cmd.Parameters.AddWithValue("@lastname", user.LastName).SqlDbType = SqlDbType.VarChar;
                     cmd.Parameters.AddWithValue("@email", user.Email).SqlDbType = SqlDbType.VarChar;
+                    cmd.Parameters.AddWithValue("@type", user.Type).SqlDbType = SqlDbType.VarChar;
                     cmd.Parameters.AddWithValue("@adminPrivilege", user.AdminPrivilege).SqlDbType = SqlDbType.VarChar;
                     cmd.Parameters.AddWithValue("@oldFirstname", oldFirstname).SqlDbType = SqlDbType.VarChar;
                     cmd.Parameters.AddWithValue("@oldLastname", oldLastname).SqlDbType = SqlDbType.VarChar;
-
+                    
                     rc = cmd.ExecuteNonQuery();
                 }
                 catch (Exception e)

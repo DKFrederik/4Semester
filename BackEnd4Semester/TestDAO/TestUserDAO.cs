@@ -48,8 +48,8 @@ namespace TestDAO
         [TestMethod]
         public void TestUpdateUser()
         {
-            string oldFirstname = "TestUser";
-            string oldLastname = "TestUser";
+            string oldFirstname = "testUpdateUser";
+            string oldLastname = "testUpdateUser";
 
             User user = new User
             {
@@ -58,10 +58,31 @@ namespace TestDAO
                 FirstName = "TestUpdateUser23151",
                 LastName = "TestUpdateUser23151",
                 Email = "TestUpdateUser23151@gmail.com",
-                AdminPrivilege = -1
+                AdminPrivilege = -1,
+                Type = "user"
             };
 
             Assert.AreNotEqual(-1, udao.UpdateUser(user, oldFirstname, oldLastname));
+        }
+
+        [TestMethod]
+        public void TestWrongInfoUpdateUser()
+        {
+            string oldFirstname = "NonExistingBumOfAUserLoser";
+            string oldLastname = "NonExistingBumOfAUserLoser";
+
+            User user = new User
+            {
+                UserName = "TestUpdateUser23151",
+                Password = "TestUpdateUser23151",
+                FirstName = "TestUpdateUser23151",
+                LastName = "TestUpdateUser23151",
+                Email = "TestUpdateUser23151@gmail.com",
+                AdminPrivilege = -1,
+                Type = "user"
+            };
+
+            Assert.AreEqual(0, udao.UpdateUser(user, oldFirstname, oldLastname));
         }
 
         [TestMethod]

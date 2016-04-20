@@ -23,5 +23,8 @@ namespace Service
 
         [OperationContract]
         User FindUser(string firstname, string lastname);
+
+        [OperationContract]
+        Boolean UpdateUser(string oldFn, string oldLn, string username, string password, string firstname, string lastname, string email, int admPri, string type);
     }
 }

@@ -34,5 +34,11 @@ namespace Service
             UserCtr uCtr = new UserCtr();
             return uCtr.FindUser(firstname, lastname);
         }
+
+        public Boolean UpdateUser(string oldFn, string oldLn, string username, string password, string firstname, string lastname, string email, int admPri, string type)
+        {
+            UserCtr uCtr = new UserCtr();
+            return uCtr.UpdateUser(oldFn, oldLn, username, password, firstname, lastname, email, admPri, type);
+        }
     }
 }

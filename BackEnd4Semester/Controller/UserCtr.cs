@@ -45,5 +45,17 @@ namespace Controller
         {
             return udao.FindUser(firstname, lastname);
         }
+
+        public Boolean UpdateUser(string oldFn, string oldLn, string username, string password, string firstname, string lastname, string email, int admPri, string type)
+        {
+            Boolean success = false;
+            User u = new User(username, password, firstname, lastname, email, admPri, type);
+            if(udao.UpdateUser(u, oldFn, oldLn) > 0)
+            {
+                success = true;
+            }
+
+            return success;
+        }
     }
 }
