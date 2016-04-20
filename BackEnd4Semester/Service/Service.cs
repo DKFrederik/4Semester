@@ -54,11 +54,11 @@ namespace Service
             return uCtr.UpdateUser(oldFn, oldLn, username, password, firstname, lastname, email, admPri, type);
         }
 
-        public Boolean CreateTrainingSession(string title, User author, DateTime date, string content, Boolean isPublic,
+        public Boolean CreateTrainingSession(string title, string authorEmail, DateTime date, string content, Boolean isPublic,
             DateTime startTime, DateTime endTime, string trainer)
         {
             ContentCtr cCtr = new ContentCtr();
-            return cCtr.CreateTrainingSession(title, author, date, content, isPublic, startTime, endTime, trainer);
+            return cCtr.CreateTrainingSession(title, authorEmail, date, content, isPublic, startTime, endTime, trainer);
         }
     }
 }
