@@ -16,7 +16,7 @@ namespace Model
 
         }
 
-        public TrainingSession(string title, string author, DateTime date, string content, bool isPublic, DateTime startTime, DateTime endTime, string trainer)
+        public TrainingSession(string title, User author, DateTime date, string content, bool isPublic, DateTime startTime, DateTime endTime, string trainer)
         {
             Title = title;
             Author = author;

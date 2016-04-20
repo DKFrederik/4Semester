@@ -41,9 +41,9 @@ namespace Controller
             return success;
         }
 
-        public User FindUser(string firstname, string lastname)
+        public User FindUser(string email)
         {
-            return udao.FindUser(firstname, lastname);
+            return udao.FindUser(email);
         }
 
         public Boolean UpdateUser(string oldFn, string oldLn, string username, string password, string firstname, string lastname, string email, int admPri, string type)

@@ -23,9 +23,8 @@ namespace TestDAO
         [TestMethod]
         public void TestFindUser()
         {
-            string firstname = "testFindUser";
-            string lastname = "testFindUser";
-            Assert.IsNotNull(udao.FindUser(firstname, lastname));
+            string email = "testFindUser";
+            Assert.IsNotNull(udao.FindUser(email));
         }
         [TestMethod]
         public void TestCreateUser()

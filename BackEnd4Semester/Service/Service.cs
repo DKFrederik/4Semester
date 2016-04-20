@@ -42,10 +42,10 @@ namespace Service
             return uCtr.DeleteUser(email);
         }
 
-        public User FindUser(string firstname, string lastname)
+        public User FindUser(string email)
         {
             UserCtr uCtr = new UserCtr();
-            return uCtr.FindUser(firstname, lastname);
+            return uCtr.FindUser(email);
         }
 
         public Boolean UpdateUser(string oldFn, string oldLn, string username, string password, string firstname, string lastname, string email, int admPri, string type)

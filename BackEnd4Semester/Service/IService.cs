@@ -29,7 +29,7 @@ namespace Service
         Boolean DeleteUser(string email);
 
         [OperationContract]
-        User FindUser(string firstname, string lastname);
+        User FindUser(string email);
 
         [OperationContract]
         Boolean UpdateUser(string oldFn, string oldLn, string username, string password, string firstname, string lastname, string email, int admPri, string type);

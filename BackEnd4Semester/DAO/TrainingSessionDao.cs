@@ -19,28 +19,26 @@ namespace DAO
             this.dba = new DBAccess();
         }
 
-        public Boolean CreateTrainingSession(TrainingSession newTrainingSession)
+        public Boolean CreateTrainingSession(TrainingSession ts)
         {
-            int rc = -1;
             bool success = false;
+            EventsDao eDao = new EventsDao();
 
-            string sql = "INSERT INTO trainingSession(title, author, date, content, isPublic, startTime, endTime, trainer)" +
-                "values(@title, @author, @date, @content, @isPublic, @startTime, @endTime, @trainer)";
+            int eId = eDao.CreateEvent(ts.Title, ts.Author, ts.Date, ts.Content,
+                                ts.IsPublic, ts.StartTime, ts.EndTime, "trainingSession");
+
+
+            string sql = "INSERT INTO trainingSession(id, trainer)" +
+                "values(@eid, @trainer)";
             using (SqlCommand cmd = dba.GetDbCommand(sql))
             {
                 try
                 {
                     cmd.Parameters.Clear();
-                    cmd.Parameters.AddWithValue("@title", newTrainingSession.Title).SqlDbType = SqlDbType.VarChar;
-                    cmd.Parameters.AddWithValue("@author", newTrainingSession.Author).SqlDbType = SqlDbType.VarChar;
-                    cmd.Parameters.AddWithValue("@date", newTrainingSession.Date).SqlDbType = SqlDbType.Date;
-                    cmd.Parameters.AddWithValue("@content", newTrainingSession.Content).SqlDbType = SqlDbType.VarChar;
-                    cmd.Parameters.AddWithValue("@isPublic", newTrainingSession.IsPublic).SqlDbType = SqlDbType.Bit;
-                    cmd.Parameters.AddWithValue("@starTime", newTrainingSession.StartTime).SqlDbType = SqlDbType.VarChar;
-                    cmd.Parameters.AddWithValue("@endTime", newTrainingSession.EndTime).SqlDbType = SqlDbType.VarChar;
-                    cmd.Parameters.AddWithValue("@trainer", newTrainingSession.Trainer).SqlDbType = SqlDbType.VarChar;
+                    cmd.Parameters.AddWithValue("@eid", eId).SqlDbType = SqlDbType.Int;
+                    cmd.Parameters.AddWithValue("@trainer", ts.Trainer).SqlDbType = SqlDbType.VarChar;
 
-                    rc = cmd.ExecuteNonQuery();
+                    cmd.ExecuteNonQuery();
                     success = true;
                 }
                 catch (Exception e)

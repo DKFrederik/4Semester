@@ -12,9 +12,13 @@ namespace Controller
     public class ContentCtr
     {
         NewsDao nDao;
+        TrainingSessionDao trainingSessionDao;
+        UserCtr uCtr;
         public ContentCtr()
         {
             nDao = new NewsDao();
+            trainingSessionDao = new TrainingSessionDao();
+            uCtr = new UserCtr();
         }
         public Boolean CreateNews(string title, User author, DateTime date, string content, Boolean isPublic, string picture)
         {
@@ -26,20 +30,10 @@ namespace Controller
                 succes = true;
             }
             return succes;
-    class ContentCtr
-    {
-        TrainingSessionDao trainingSessionDao;
-
-        public ContentCtr()
-        {
-            trainingSessionDao = new TrainingSessionDao();
         }
 
-        Boolean createNews(){
-            return true;
-        }
-
-        public bool CreateTrainingSession(string title, string author, DateTime date, string content, bool isPulic, DateTime startTime, DateTime endTime, string trainer){
+        public bool CreateTrainingSession(string title, string authorEmail, DateTime date, string content, bool isPulic, DateTime startTime, DateTime endTime, string trainer){
+            User author = uCtr.FindUser(authorEmail);
             TrainingSession newTs = new TrainingSession(title, author, date, content, isPulic, startTime, endTime, trainer);
             return trainingSessionDao.CreateTrainingSession(newTs);
         }
@@ -54,9 +48,10 @@ namespace Controller
             return true;
         }
 
-        public Boolean CreateMatch(string title, User author, DateTime date, string content, Boolean isPublic, 
-            DateTime startTime, DateTime endTime, string opponent, int homegoals, int awaygoals, Team team){
-            
+        public Boolean CreateMatch(string title, User author, DateTime date, string content, Boolean isPublic,
+            DateTime startTime, DateTime endTime, string opponent, int homegoals, int awaygoals, Team team)
+        {
+
             Boolean succes = false;
             MatchDao mDao = new MatchDao();
             Match m = new Match()
@@ -79,6 +74,7 @@ namespace Controller
                 succes = true;
             }
             return succes;
+        }
         public bool DeleteTrainingSession(string title)
         {
             Boolean success = false;
@@ -88,15 +84,6 @@ namespace Controller
                 success = true;
             }
             return success;
-        }
-
-        Boolean createMatch(){
-            return true;
-        }
-
-        List<Events> getEvents(DateTime rangeStart, DateTime rangeStop)
-        {
-            return new List<Events>();
         }
 
         List<News> getNews(DateTime rangeStart, DateTime rangeStop)

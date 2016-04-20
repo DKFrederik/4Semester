@@ -14,7 +14,7 @@ namespace TestDAO
             TrainingSessionDao tsDao = new TrainingSessionDao();
             TrainingSession ts = new TrainingSession();
             ts.Title = "test";
-            ts.Author = "test";
+            ts.Author = new User { Email = "ContentTestUser" };
             ts.Date = new DateTime(2016, 01, 01);
             ts.Content = "content";
             ts.IsPublic = true;

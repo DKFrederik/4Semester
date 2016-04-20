@@ -48,15 +48,14 @@ namespace DAO
             return rc;
         }
 
-        public User FindUser(string firstname, string lastname)
+        public User FindUser(string email)
         {
             User foundUser = null;
 
-            string sql = "SELECT * FROM Users WHERE firstname=@firstname AND lastname=@lastname";
+            string sql = "SELECT * FROM Users WHERE email=@email";
             using (SqlCommand cmd = dba.GetDbCommand(sql))
             {
-                cmd.Parameters.AddWithValue("@firstname", firstname).SqlDbType = SqlDbType.VarChar;
-                cmd.Parameters.AddWithValue("@lastname", lastname).SqlDbType = SqlDbType.VarChar;
+                cmd.Parameters.AddWithValue("@email", email).SqlDbType = SqlDbType.VarChar;
 
                 using (SqlDataReader reader = cmd.ExecuteReader())
                 {
