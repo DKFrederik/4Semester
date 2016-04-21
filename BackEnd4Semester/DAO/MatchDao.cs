@@ -81,7 +81,7 @@ namespace DAO
                                 Opponent = reader.GetString("opponent"),
                                 HomeGoal = reader.GetInt32("homegoals"),
                                 AwayGoal = reader.GetInt32("awaygoals"),
-                                Team = tDao.FindTeam(reader.GetInt32("teamId"))
+                                Team = tDao.FindTeam(reader.GetInt32("teamId"), false)
                             };
                             
                             matches.Add(m);
@@ -130,7 +130,7 @@ namespace DAO
                                 Opponent = reader.GetString("opponent"),
                                 HomeGoal = reader.GetInt32("homegoals"),
                                 AwayGoal = reader.GetInt32("awaygoals"),
-                                Team = tDao.FindTeam(reader.GetInt32("teamId"))
+                                Team = tDao.FindTeam(reader.GetInt32("teamId"), false)
                             };
                         }
                     }

@@ -29,9 +29,14 @@ namespace Controller
             return succes;
         }
 
-        public Team GetTeam(string name)
+        public Team GetTeam(string name, Boolean retrieveAssoc)
         {
-            return tDao.FindTeam(name);
+            return tDao.FindTeam(name, retrieveAssoc);
+        }
+
+        public Team GetTeam(int id, Boolean retrieveAssoc)
+        {
+            return tDao.FindTeam(id, retrieveAssoc);
         }
 
         public bool UpdateTeam()

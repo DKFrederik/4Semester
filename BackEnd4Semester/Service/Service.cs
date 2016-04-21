@@ -14,26 +14,22 @@ namespace Service
     {
         public Player FindPlayer(String email)
         {
-            UserCtr uCtr = new UserCtr();
-            return uCtr.FindPlayer(email);
+            return new UserCtr().FindPlayer(email);
         }
 
         public Boolean DeletePlayer(string email)
         {
-            UserCtr uCtr = new UserCtr();
-            return uCtr.DeletePlayer(email);
+            return new UserCtr().DeletePlayer(email);
         }
 
         public Boolean CreatePlayer(string username, string password, string firstname, string lastname, string email, int admPri, string type, int number, int gamesplayed, int goals, int penalties)
         {
-            UserCtr uCtr = new UserCtr();
-            return uCtr.CreatePlayer(username, password, firstname, lastname, email, admPri, type, number, gamesplayed, goals, penalties);
+            return new UserCtr().CreatePlayer(username, password, firstname, lastname, email, admPri, type, number, gamesplayed, goals, penalties);
         }
 
         public Boolean CreateUser(string username, string password, string firstname, string lastname, string email, int admPri, string type)
         {
-            UserCtr uCtr = new UserCtr();
-            return uCtr.CreateUser(username, password, firstname, lastname, email, admPri, type);
+            return new UserCtr().CreateUser(username, password, firstname, lastname, email, admPri, type);
         }
 
         public Boolean CreateNews(string title, User author, DateTime date, string content, Boolean isPublic, string picture)
@@ -51,20 +47,17 @@ namespace Service
 
         public Boolean DeleteUser(string email)
         {
-            UserCtr uCtr = new UserCtr();
-            return uCtr.DeleteUser(email);
+            return new UserCtr().DeleteUser(email);
         }
 
         public User FindUser(string email)
         {
-            UserCtr uCtr = new UserCtr();
-            return uCtr.FindUser(email);
+            return new UserCtr().FindUser(email);
         }
 
         public Boolean UpdateUser(string oldFn, string oldLn, string username, string password, string firstname, string lastname, string email, int admPri, string type)
         {
-            UserCtr uCtr = new UserCtr();
-            return uCtr.UpdateUser(oldFn, oldLn, username, password, firstname, lastname, email, admPri, type);
+            return new UserCtr().UpdateUser(oldFn, oldLn, username, password, firstname, lastname, email, admPri, type);
         }
 
         public Boolean CreateTrainingSession(string title, string authorEmail, DateTime date, string content, Boolean isPublic,
@@ -72,6 +65,17 @@ namespace Service
         {
             ContentCtr cCtr = new ContentCtr();
             return cCtr.CreateTrainingSession(title, authorEmail, date, content, isPublic, startTime, endTime, trainer);
+        }
+
+        public Team FindTeam(int id, Boolean retrieveAssoc)
+        {
+
+            return new TeamCtr().GetTeam(id, retrieveAssoc);
+        }
+
+        public Team FindTeam(string name, Boolean retrieveAssoc)
+        {
+            return new TeamCtr().GetTeam(name, retrieveAssoc);
         }
     }
 }
