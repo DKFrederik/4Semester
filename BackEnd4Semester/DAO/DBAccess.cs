@@ -33,17 +33,17 @@ namespace DAO
         //                               "database=MarinaBooking; " +
         //                               "connection timeout=10";
 
-        /*        public static string connectionString = @"server=CLAUS-PC\SQLEXPRESS;" +
-                                               "Trusted_Connection=True;" +
-                                               "MultipleActiveResultSets=True;" +
-                                               "database=MarinaBooking; " +
-                                               "connection timeout=10";
-        */
-        public static string connectionString = @"server=ASUS\SQLEXPRESS;" +
+        public static string connectionString = @"server=CLAUS-PC\SQLEXPRESS;" +
                                        "Trusted_Connection=True;" +
                                        "MultipleActiveResultSets=True;" +
-                                       "database=bsi; " +
+                                       "database=MarinaBooking; " +
                                        "connection timeout=10";
+
+        //public static string connectionString = @"server=ASUS\SQLEXPRESS;" +
+        //                               "Trusted_Connection=True;" +
+        //                               "MultipleActiveResultSets=True;" +
+        //                               "database=bsi; " +
+        //                               "connection timeout=10";
 
         private SqlConnection dbconn;
 
