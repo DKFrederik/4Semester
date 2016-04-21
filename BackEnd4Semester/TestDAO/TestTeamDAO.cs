@@ -36,8 +36,15 @@ namespace TestDAO
         public void TestAddPlayer()
         {
             Player p = pDao.FindPlayer("TeamAddPlayerTest");
-            Team t = tDao.FindTeam("TeamAddPlayerTestTeam", false);
+            Team t = tDao.FindTeam("TeamPlayerTestTeam", false);
             Assert.IsTrue(tDao.AddPlayer(p.Id, t.Id) > 0);
+        }
+
+        [TestMethod]
+        public void TestRemovePlayer()
+        {
+            Player p = pDao.FindPlayer("RetardoPlayerWhoGotSacked");
+            Team t = tDao.FindTeam("TeamPlayerTestTeam", false);
         }
     }
 }

@@ -164,13 +164,43 @@ namespace DAO
                     + "VALUES(@playerId, @teamId)";
             using(SqlCommand cmd = dba.GetDbCommand(sql))
             {
-                cmd.Parameters.AddWithValue("@playerId", playerId).SqlDbType = SqlDbType.Int;
-                cmd.Parameters.AddWithValue("@teamId", teamId).SqlDbType = SqlDbType.Int;
+                try
+                {
+                    cmd.Parameters.AddWithValue("@playerId", playerId).SqlDbType = SqlDbType.Int;
+                    cmd.Parameters.AddWithValue("@teamId", teamId).SqlDbType = SqlDbType.Int;
 
-                rc = cmd.ExecuteNonQuery();
+                    rc = cmd.ExecuteNonQuery();
+                }
+                catch(SqlException e)
+                {
+                    throw e;
+                }
+
             }
 
             return rc; 
+        }
+
+        public int RemovePlayer(int playerId, int teamId)
+        {
+            int rc = -1;
+            string sql = "DELETE FROM PlayerTeam WHERE playerId=@playerId AND teamId=@teamId";
+            using(SqlCommand cmd = dba.GetDbCommand(sql))
+            {
+                try
+                {
+                    cmd.Parameters.AddWithValue("@playerId", playerId).SqlDbType = SqlDbType.Int;
+                    cmd.Parameters.AddWithValue("@teamId", teamId).SqlDbType = SqlDbType.Int;
+
+                    rc = cmd.ExecuteNonQuery();
+                }
+                catch(SqlException e)
+                {
+                    throw e;
+                }
+            }
+
+            return rc;
         }
 
         private List<Player> GetPlayers(int teamId)
