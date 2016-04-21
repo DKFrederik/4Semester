@@ -76,6 +76,39 @@ namespace DAO
             return foundTeam;
         }
 
+        public Team FindTeam(int id)
+        {
+            Team foundTeam = null;
+
+            string sql = "SELECT * FROM team WHERE id=@id";
+            using (SqlCommand cmd = dba.GetDbCommand(sql))
+            {
+                cmd.Parameters.AddWithValue("@id", id).SqlDbType = SqlDbType.Int;
+
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    try
+                    {
+                        while (reader.Read())
+                        {
+                            foundTeam = new Team()
+                            {
+                                Name = reader.GetString("name"),
+                                Type = reader.GetString("type"),
+                            };
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        throw e;
+                    }
+                }
+                cmd.Parameters.Clear();
+            }
+
+            return foundTeam;
+        }
+
         public int UpdateTeam(Team team, string oldName)
         {
             int rc = -1;

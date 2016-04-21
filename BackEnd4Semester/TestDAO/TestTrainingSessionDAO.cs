@@ -8,8 +8,16 @@ namespace TestDAO
     [TestClass]
     public class TestTrainingSessionDAO
     {
+        private TrainingSessionDao tdao;
+
+        [TestInitialize]
+        public void Initialize()
+        {
+            tdao = new TrainingSessionDao();
+        }
+
         [TestMethod]
-        public void CreateTrainingSession()
+        public void TestCreateTrainingSession()
         {
             TrainingSessionDao tsDao = new TrainingSessionDao();
             TrainingSession ts = new TrainingSession();
@@ -20,9 +28,24 @@ namespace TestDAO
             ts.IsPublic = true;
             ts.StartTime = ts.Date = new DateTime(2016, 01, 01); ;
             ts.EndTime = ts.Date = new DateTime(2016, 01, 02); ;
-            ts.Trainer = "trainer";
+            ts.Trainer = "Claus";
 
-            Assert.IsTrue(tsDao.CreateTrainingSession(ts));
+            //Assert.IsTrue(tsDao.CreateTrainingSession(ts));
+            Assert.AreNotEqual(-1, tsDao.CreateTrainingSession(ts));
+        }
+
+        [TestMethod]
+        public void FindTrainingSession()
+        {
+            Assert.IsFalse(tdao.FindTrainingSession("træning1") == null);
+        }
+
+        [TestMethod]
+        public void DeleteTrainingSession()
+        {
+            string title = "træning1";
+
+            Assert.IsTrue(0 == tdao.DeleteTrainingSession(title));
         }
     }
 }

@@ -67,10 +67,11 @@ namespace Service
             return uCtr.UpdateUser(oldFn, oldLn, username, password, firstname, lastname, email, admPri, type);
         }
 
-        public Player FindPlayer(string email)
+        public Boolean CreateTrainingSession(string title, string authorEmail, DateTime date, string content, Boolean isPublic,
+            DateTime startTime, DateTime endTime, string trainer)
         {
-            UserCtr uCtr = new UserCtr();
-            return uCtr.FindPlayer(email);
+            ContentCtr cCtr = new ContentCtr();
+            return cCtr.CreateTrainingSession(title, authorEmail, date, content, isPublic, startTime, endTime, trainer);
         }
     }
 }

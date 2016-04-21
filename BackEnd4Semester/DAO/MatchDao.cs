@@ -53,14 +53,16 @@ namespace DAO
 
         public List<Match> FindMatches(DateTime date)
         {
+            UserDAO uDao = new UserDAO();
+            TeamDao tDao = new TeamDao();
             List<Match> matches = new List<Match>();
 
-            string sql = "SELECT * FROM match m join Event e on m.id = e.id join ContentInfo c on c.id = e.id "
+            string sql = "SELECT c.title, c.creatorId, c.date, c.content, c.IsPublic, e.startTime, e.endTime, m.opponent, m.homegoals, m.awaygoals, m.teamId FROM match m join Event e on m.id = e.id join ContentInfo c on c.id = e.id "
                 + "where c.date = @date";
 
             using (SqlCommand cmd = dba.GetDbCommand(sql))
             {
-                cmd.Parameters.AddWithValue("@date", date).SqlDbType = SqlDbType.VarChar;
+                cmd.Parameters.AddWithValue("@date", date).SqlDbType = SqlDbType.DateTime;
 
                 using (SqlDataReader reader = cmd.ExecuteReader())
                 {
@@ -70,15 +72,16 @@ namespace DAO
                         {
                             Match m = new Match(){
                                 Title = reader.GetString("title"),
-                                //Author = reader.GetString("author"), TODO
+                                Author = uDao.FindUser(reader.GetInt32("creatorId")),
                                 Date = reader.GetDateTime("date"),
                                 Content = reader.GetString("content"),
                                 IsPublic = reader.GetBoolean("isPublic"),
                                 StartTime = reader.GetDateTime("startTime"),
                                 EndTime = reader.GetDateTime("endTime"),
                                 Opponent = reader.GetString("opponent"),
-                                HomeGoal = reader.GetInt32("matchScore")
-                                //Team = reader.GetString("team")   TODO
+                                HomeGoal = reader.GetInt32("homegoals"),
+                                AwayGoal = reader.GetInt32("awaygoals"),
+                                Team = tDao.FindTeam(reader.GetInt32("teamId"))
                             };
                             
                             matches.Add(m);
@@ -93,6 +96,54 @@ namespace DAO
             }
 
             return matches;
+        }
+
+        public Match FindMatch(int id)
+        {
+            UserDAO uDao = new UserDAO();
+            TeamDao tDao = new TeamDao();
+
+            Match m = null;
+
+            string sql = "SELECT c.title, c.creatorId, c.date, c.content, c.IsPublic, e.startTime, e.endTime, m.opponent, m.homegoals, m.awaygoals, m.teamId FROM match m join Event e on m.id = e.id join ContentInfo c on c.id = e.id "
+                + "where c.id = @id";
+
+            using (SqlCommand cmd = dba.GetDbCommand(sql))
+            {
+                cmd.Parameters.AddWithValue("@id", id).SqlDbType = SqlDbType.DateTime;
+
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    try
+                    {
+                        while (reader.Read())
+                        {
+                            m = new Match()
+                            {
+                                Title = reader.GetString("title"),
+                                Author = uDao.FindUser(reader.GetInt32("creatorId")),
+                                Date = reader.GetDateTime("date"),
+                                Content = reader.GetString("content"),
+                                IsPublic = reader.GetBoolean("isPublic"),
+                                StartTime = reader.GetDateTime("startTime"),
+                                EndTime = reader.GetDateTime("endTime"),
+                                Opponent = reader.GetString("opponent"),
+                                HomeGoal = reader.GetInt32("homegoals"),
+                                AwayGoal = reader.GetInt32("awaygoals"),
+                                Team = tDao.FindTeam(reader.GetInt32("teamId"))
+                            };
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        throw e;
+                    }
+                    
+                }
+                cmd.Parameters.Clear();
+            }
+
+            return m;
         }
 
         public int UpdateMatch(Match match, string oldTitle)
