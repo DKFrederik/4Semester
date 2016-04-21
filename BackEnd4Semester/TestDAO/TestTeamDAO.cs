@@ -10,11 +10,13 @@ namespace TestDAO
     {
 
         private TeamDao tDao;
+        private PlayerDao pDao;
 
         [TestInitialize]
         public void Initialize()
         {
             tDao = new TeamDao();
+            pDao = new PlayerDao();
         }
 
         [TestMethod]
@@ -28,6 +30,14 @@ namespace TestDAO
         {
             Assert.IsNotNull(tDao.FindTeam("TeamForTestingFind", true).Players);
             Assert.AreEqual(tDao.FindTeam("TeamForTestingFind", true).Players.Count, 1);
+        }
+
+        [TestMethod]
+        public void TestAddPlayer()
+        {
+            Player p = pDao.FindPlayer("TeamAddPlayerTest");
+            Team t = tDao.FindTeam("TeamAddPlayerTestTeam", false);
+            Assert.IsTrue(tDao.AddPlayer(p.Id, t.Id) > 0);
         }
     }
 }

@@ -44,5 +44,6 @@ namespace Service
 
         [OperationContract]
         Team FindTeam(string name, Boolean retrieveAssoc);
+
     }
 }

@@ -157,6 +157,22 @@ namespace DAO
             return rc;
         }
 
+        public int AddPlayer(int playerId, int teamId)
+        {
+            int rc = -1;
+            string sql = "INSERT INTO PlayerTeam(playerId, teamId) "
+                    + "VALUES(@playerId, @teamId)";
+            using(SqlCommand cmd = dba.GetDbCommand(sql))
+            {
+                cmd.Parameters.AddWithValue("@playerId", playerId).SqlDbType = SqlDbType.Int;
+                cmd.Parameters.AddWithValue("@teamId", teamId).SqlDbType = SqlDbType.Int;
+
+                rc = cmd.ExecuteNonQuery();
+            }
+
+            return rc; 
+        }
+
         private List<Player> GetPlayers(int teamId)
         {
             List<Player> p = new List<Player>();
