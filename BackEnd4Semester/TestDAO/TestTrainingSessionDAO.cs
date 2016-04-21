@@ -37,15 +37,7 @@ namespace TestDAO
         [TestMethod]
         public void FindTrainingSession()
         {
-            Assert.IsFalse(tdao.FindTrainingSession("træning1") == null);
-        }
-
-        [TestMethod]
-        public void DeleteTrainingSession()
-        {
-            string title = "træning1";
-
-            Assert.IsTrue(0 == tdao.DeleteTrainingSession(title));
+            Assert.IsFalse(tdao.FindTrainingSessions(new DateTime(2016, 01, 01)) == null);
         }
     }
 }

@@ -67,6 +67,22 @@ namespace Service
             return cCtr.CreateTrainingSession(title, authorEmail, date, content, isPublic, startTime, endTime, trainer);
         }
 
+        public List<Match> FindMatches(DateTime date)
+        {
+            return new ContentCtr().FindMatches(date);
+        }
+
+        public List<TrainingSession> FindTrainingSessions(DateTime date)
+        {
+            return new ContentCtr().FindTrainingSessions(date);
+        }
+
+        public List<News> FindNews(DateTime date)
+        {
+            return new ContentCtr().FindNews(date);
+        }
+
+
         public Team FindTeam(int id, Boolean retrieveAssoc)
         {
 

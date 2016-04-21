@@ -13,11 +13,13 @@ namespace DAO
 {
     public class NewsDao
     {
+        ContentInfoDAO ctDao;
         private DBAccess dba;
 
         public NewsDao()
         {
             this.dba = new DBAccess();
+            ctDao = new ContentInfoDAO();
         }
 
         /// <summary>
@@ -28,8 +30,6 @@ namespace DAO
         public int CreateNews(News news)
         {
             int rc = -1;
-
-            ContentInfoDAO ctDao = new ContentInfoDAO();
 
             int ctId = ctDao.CreateContentInfo(news.Title, news.Author, news.Date, news.Content, news.IsPublic, "news");
 
@@ -53,14 +53,15 @@ namespace DAO
             return rc;
         }
 
-        public News FindNews(string title)
+        public List<News> FindNews(DateTime date)
         {
-            News foundNews = null;
+            News n = null;
+            List<News> newsList = new List<News>();
 
-            string sql = "SELECT * FROM news WHERE title=@title";
+            string sql = "SELECT " + ctDao.buildContentQuery() + ", n.pictureURL FROM News n join ContentInfo c ON c.id = n.id WHERE c.date=@date";
             using (SqlCommand cmd = dba.GetDbCommand(sql))
             {
-                cmd.Parameters.AddWithValue("@title", title).SqlDbType = SqlDbType.VarChar;
+                cmd.Parameters.AddWithValue("@date", date).SqlDbType = SqlDbType.DateTime;
 
                 using (SqlDataReader reader = cmd.ExecuteReader())
                 {
@@ -68,15 +69,11 @@ namespace DAO
                     {
                         while (reader.Read())
                         {
-                            foundNews = new News()
-                            {
-                                Title = reader.GetString("title"),
-                                Author = null,  //TODO reference
-                                Date = reader.GetDateTime("date"),
-                                Content = reader.GetString("content"),
-                                IsPublic = reader.GetBoolean("isPublic"),
-                                Picture = reader.GetString("picture")
-                            };
+                            n = new News();
+                            n = (News) ctDao.buildPartialObject(reader, n);
+                            n.Picture = reader.GetString("pictureURL");
+
+                            newsList.Add(n);
                         }
                     }
                     catch (Exception e)
@@ -87,7 +84,7 @@ namespace DAO
                 cmd.Parameters.Clear();
             }
 
-            return foundNews;
+            return newsList;
         }
 
         public int UpdateNews(News news, string oldTitle)

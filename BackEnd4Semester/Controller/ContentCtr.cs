@@ -11,13 +11,9 @@ namespace Controller
 {
     public class ContentCtr
     {
-        NewsDao nDao;
-        TrainingSessionDao trainingSessionDao;
         UserCtr uCtr;
         public ContentCtr()
         {
-            nDao = new NewsDao();
-            trainingSessionDao = new TrainingSessionDao();
             uCtr = new UserCtr();
         }
         public Boolean CreateNews(string title, User author, DateTime date, string content, Boolean isPublic, string picture)
@@ -25,7 +21,7 @@ namespace Controller
             Boolean succes = false;
             News n = new News(title, author, date, content, isPublic, picture);
 
-            if (0 < nDao.CreateNews(n))
+            if (0 < new NewsDao().CreateNews(n))
             {
                 succes = true;
             }
@@ -35,12 +31,12 @@ namespace Controller
         public Boolean CreateTrainingSession(string title, string authorEmail, DateTime date, string content, bool isPulic, DateTime startTime, DateTime endTime, string trainer){
             User author = uCtr.FindUser(authorEmail);
             TrainingSession newTs = new TrainingSession(title, author, date, content, isPulic, startTime, endTime, trainer);
-            return trainingSessionDao.CreateTrainingSession(newTs);
+            return new TrainingSessionDao().CreateTrainingSession(newTs);
         }
 
-        public TrainingSession FindTrainingSession(string title)
+        public List<TrainingSession> FindTrainingSessions(DateTime date)
         {
-            return trainingSessionDao.FindTrainingSession(title);
+            return new TrainingSessionDao().FindTrainingSessions(date);
         }
 
         public bool UpdateTrainingSession(string oldTitle, string newTitle, string newAuthor, DateTime newDate, string newContent, bool newIsPulic, DateTime newStartTime, DateTime newEndTime, string newTrainer)
@@ -78,7 +74,7 @@ namespace Controller
         public bool DeleteTrainingSession(string title)
         {
             Boolean success = false;
-            int rc = trainingSessionDao.DeleteTrainingSession(title);
+            int rc = new TrainingSessionDao().DeleteTrainingSession(title);
             if(rc > 0)
             {
                 success = true;
@@ -86,21 +82,29 @@ namespace Controller
             return success;
         }
 
-        List<News> getNews(DateTime rangeStart, DateTime rangeStop)
+        public List<News> FindNews(DateTime date)
         {
-            return new List<News>();
+            return new NewsDao().FindNews(date);
         }
 
-        Boolean updateNews(){
+        public List<Match> FindMatches(DateTime date)
+        {
+            return new MatchDao().FindMatches(date);
+        }
+
+        public Boolean updateNews()
+        {
             return true;
         }
 
 
-        Boolean updateMatch(){
+        public Boolean updateMatch()
+        {
             return true;
         }
-        
-        Boolean updateContentInfo(){
+
+        public Boolean updateContentInfo()
+        {
             return true;
         }
     }

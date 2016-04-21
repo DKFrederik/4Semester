@@ -53,11 +53,11 @@ namespace DAO
 
         public List<Match> FindMatches(DateTime date)
         {
-            UserDAO uDao = new UserDAO();
             TeamDao tDao = new TeamDao();
+            EventsDao eDao = new EventsDao();
             List<Match> matches = new List<Match>();
 
-            string sql = "SELECT c.title, c.creatorId, c.date, c.content, c.IsPublic, e.startTime, e.endTime, m.opponent, m.homegoals, m.awaygoals, m.teamId FROM match m join Event e on m.id = e.id join ContentInfo c on c.id = e.id "
+            string sql = "SELECT " + eDao.buildEventQuery() + ", m.opponent, m.homegoals, m.awaygoals, m.teamId FROM match m join Event e on m.id = e.id join ContentInfo c on c.id = e.id "
                 + "where c.date = @date";
 
             using (SqlCommand cmd = dba.GetDbCommand(sql))
@@ -70,19 +70,12 @@ namespace DAO
                     {
                         while (reader.Read())
                         {
-                            Match m = new Match(){
-                                Title = reader.GetString("title"),
-                                Author = uDao.FindUser(reader.GetInt32("creatorId")),
-                                Date = reader.GetDateTime("date"),
-                                Content = reader.GetString("content"),
-                                IsPublic = reader.GetBoolean("isPublic"),
-                                StartTime = reader.GetDateTime("startTime"),
-                                EndTime = reader.GetDateTime("endTime"),
-                                Opponent = reader.GetString("opponent"),
-                                HomeGoal = reader.GetInt32("homegoals"),
-                                AwayGoal = reader.GetInt32("awaygoals"),
-                                Team = tDao.FindTeam(reader.GetInt32("teamId"), false)
-                            };
+                            Match m = new Match();
+                            m = (Match) eDao.buildPartialObject(reader, m);
+                            m.Opponent = reader.GetString("opponent");
+                            m.HomeGoal = reader.GetInt32("homegoals");
+                            m.AwayGoal = reader.GetInt32("awaygoals");
+                            m.Team = tDao.FindTeam(reader.GetInt32("teamId"),false);
                             
                             matches.Add(m);
                         }
@@ -100,7 +93,7 @@ namespace DAO
 
         public Match FindMatch(int id)
         {
-            UserDAO uDao = new UserDAO();
+            
             TeamDao tDao = new TeamDao();
 
             Match m = null;
@@ -121,7 +114,7 @@ namespace DAO
                             m = new Match()
                             {
                                 Title = reader.GetString("title"),
-                                Author = uDao.FindUser(reader.GetInt32("creatorId")),
+                                //Author = uDao.FindUser(reader.GetInt32("creatorId")),
                                 Date = reader.GetDateTime("date"),
                                 Content = reader.GetString("content"),
                                 IsPublic = reader.GetBoolean("isPublic"),

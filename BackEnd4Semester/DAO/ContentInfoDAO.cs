@@ -53,5 +53,21 @@ namespace DAO
 
             return maxId;
         }
+
+        public string buildContentQuery()
+        {
+            return "c.title, c.creatorId, c.date, c.content, c.IsPublic";
+        }
+
+        public ContentInfo buildPartialObject(SqlDataReader sdr, ContentInfo obj)
+        {
+            UserDAO uDao = new UserDAO();
+            obj.Title = sdr.GetString("title");
+            obj.Author = uDao.FindUser(sdr.GetInt32("creatorId"));
+            obj.Date = sdr.GetDateTime("date");
+            obj.Content = sdr.GetString("content");
+            obj.IsPublic = sdr.GetBoolean("IsPublic");
+            return obj;
+        }
     }
 }
