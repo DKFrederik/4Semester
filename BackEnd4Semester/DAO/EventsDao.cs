@@ -13,10 +13,12 @@ namespace DAO
     public class EventsDao
     {
         private DBAccess dba;
+        private ContentInfoDAO ctDao;
 
         public EventsDao()
         {
             this.dba = new DBAccess();
+            ctDao = new ContentInfoDAO();
         }
 
         public int CreateEvent(string title, User author, DateTime date, string content, 
@@ -58,11 +60,23 @@ namespace DAO
             }
         }
 
-        public Events FindEvent(string title)
+        public string buildEventQuery()
+        {
+            return (ctDao.buildContentQuery() + ", e.startTime, e.endTime");
+        }
+
+        public Events buildPartialObject(SqlDataReader sdr, Events obj)
+        {
+            obj = (Events)ctDao.buildPartialObject(sdr, obj);
+            obj.StartTime= sdr.GetDateTime("startTime");
+            obj.EndTime = sdr.GetDateTime("endTime");
+            return obj;
+        }
+        public Events FindEvents(string title)
         {
             Events foundEvent = null;
 
-            string sql = "SELECT * FROM events WHERE title=@title";
+            string sql = "SELECT " + ctDao.buildContentQuery() + ", e.startTime, e.endTime FROM events WHERE title=@title";
             using (SqlCommand cmd = dba.GetDbCommand(sql))
             {
                 cmd.Parameters.AddWithValue("@title", title).SqlDbType = SqlDbType.VarChar;

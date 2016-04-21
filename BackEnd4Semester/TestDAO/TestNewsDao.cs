@@ -23,12 +23,18 @@ namespace TestDAO
             {
                 Author = new User() { Email = "ContentTestUser" },
                 Content = "testNews",
-                Date = DateTime.Now,
+                Date = new DateTime(2016, 04, 20),
                 IsPublic = true,
                 Picture = "EtBilledeafCarsten.url",
                 Title = "testNews"
             };
             Assert.IsTrue(0 < newsDao.CreateNews(testNews));
+        }
+
+        [TestMethod]
+        public void TestFindNews()
+        {
+            Assert.IsFalse(newsDao.FindNews(new DateTime(2016, 04, 20)).Count == 0);
         }
     }
 }

@@ -55,12 +55,6 @@ namespace Service
             return uCtr.DeleteUser(email);
         }
 
-        public User FindUser(string email)
-        {
-            UserCtr uCtr = new UserCtr();
-            return uCtr.FindUser(email);
-        }
-
         public Boolean UpdateUser(string oldFn, string oldLn, string username, string password, string firstname, string lastname, string email, int admPri, string type)
         {
             UserCtr uCtr = new UserCtr();
@@ -72,6 +66,27 @@ namespace Service
         {
             ContentCtr cCtr = new ContentCtr();
             return cCtr.CreateTrainingSession(title, authorEmail, date, content, isPublic, startTime, endTime, trainer);
+        }
+
+        public List<Match> FindMatches(DateTime date)
+        {
+            return new ContentCtr().FindMatches(date);
+        }
+
+        public List<TrainingSession> FindTrainingSessions(DateTime date)
+        {
+            return new ContentCtr().FindTrainingSessions(date);
+        }
+
+        public List<News> FindNews(DateTime date)
+        {
+            return new ContentCtr().FindNews(date);
+        }
+
+
+        public User FindUser(string email)
+        {
+            throw new NotImplementedException();
         }
     }
 }

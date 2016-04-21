@@ -13,10 +13,12 @@ namespace DAO
     public class TrainingSessionDao
     {
         private DBAccess dba;
+        private EventsDao eDao;
 
         public TrainingSessionDao()
         {
             this.dba = new DBAccess();
+            eDao = new EventsDao();
         }
 
         public Boolean CreateTrainingSession(TrainingSession ts)
@@ -49,14 +51,15 @@ namespace DAO
             return success;
         }
 
-        public TrainingSession FindTrainingSession(string title)
+        public List<TrainingSession> FindTrainingSessions(DateTime date)
         {
-            TrainingSession foundTrainingSession = null;
+            List<TrainingSession> tList = new List<TrainingSession>();
 
-            string sql = "SELECT * FROM events WHERE title=@title";
+            string sql = "SELECT " + eDao.buildEventQuery() + ", t.trainer FROM trainingSession t join Event e on t.id = e.id join ContentInfo c on c.id = e.id "
+                + "where c.date = @date";
             using (SqlCommand cmd = dba.GetDbCommand(sql))
             {
-                cmd.Parameters.AddWithValue("@title", title).SqlDbType = SqlDbType.VarChar;
+                cmd.Parameters.AddWithValue("@date", date).SqlDbType = SqlDbType.DateTime;
 
                 using (SqlDataReader reader = cmd.ExecuteReader())
                 {
@@ -64,17 +67,11 @@ namespace DAO
                     {
                         while (reader.Read())
                         {
-                            foundTrainingSession = new TrainingSession()
-                            {
-                                Title = reader.GetString("title"),
-                                //Author = reader.GetInt32("author"), TODO
-                                Date = reader.GetDateTime("date"),
-                                Content = reader.GetString("content"),
-                                IsPublic = reader.GetBoolean("isPublic"),
-                                StartTime = reader.GetDateTime("startTime"),
-                                EndTime = reader.GetDateTime("endTime"),
-                                Trainer = reader.GetString("trainer")            
-                            };
+                            TrainingSession t = new TrainingSession();
+                            t = (TrainingSession) eDao.buildPartialObject(reader, t);
+                            t.Trainer = reader.GetString("trainer");
+
+                            tList.Add(t);
                         }
                     }
                     catch (Exception e)
@@ -85,7 +82,7 @@ namespace DAO
                 cmd.Parameters.Clear();
             }
 
-            return foundTrainingSession;
+            return tList;
         }
 
         public int UpdateTrainingSession(TrainingSession trainingSession, string oldTitle)

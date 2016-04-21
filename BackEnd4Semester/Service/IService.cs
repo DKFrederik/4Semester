@@ -37,6 +37,15 @@ namespace Service
         User FindUser(string email);
 
         [OperationContract]
+        List<Match> FindMatches(DateTime date);
+
+        [OperationContract]
+        List<TrainingSession> FindTrainingSessions(DateTime date);
+
+        [OperationContract]
+        List<News> FindNews(DateTime date);
+
+        [OperationContract]
         Boolean UpdateUser(string oldFn, string oldLn, string username, string password, string firstname, string lastname, string email, int admPri, string type);
     }
 }
