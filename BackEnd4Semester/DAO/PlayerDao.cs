@@ -65,19 +65,7 @@ namespace DAO
                     {
                         while (reader.Read())
                         {
-                            p = new Player()
-                            {
-                                Id = reader.GetInt32("id"),
-                                UserName = reader.GetString("username"),
-                                FirstName = reader.GetString("firstname"),
-                                LastName = reader.GetString("lastname"),
-                                Email = reader.GetString("email"),
-                                AdminPrivilege = reader.GetInt32("adminPrivilege"),
-                                Number = reader.GetInt32("number"),
-                                GamesPlayed = reader.GetInt32("gamesPlayed"),
-                                Goals = reader.GetInt32("goals"),
-                                Penalties = reader.GetInt32("penalties")
-                            };
+                            p = BuildPlayer(reader);
                         }
                     }
                     catch (Exception e)
@@ -142,6 +130,34 @@ namespace DAO
                 }
             }
             return rc;
+        }
+
+        private Player BuildPlayer(SqlDataReader r)
+        {
+            Player p;
+
+            try
+            {
+                p = new Player()
+                {
+                    Id = r.GetInt32("id"),
+                    UserName = r.GetString("username"),
+                    FirstName = r.GetString("firstname"),
+                    LastName = r.GetString("lastname"),
+                    Email = r.GetString("email"),
+                    AdminPrivilege = r.GetInt32("adminPrivilege"),
+                    Number = r.GetInt32("number"),
+                    GamesPlayed = r.GetInt32("gamesPlayed"),
+                    Goals = r.GetInt32("goals"),
+                    Penalties = r.GetInt32("penalties")
+                };
+            }
+            catch (SqlException e)
+            {
+                throw e;
+            }
+
+            return p;
         }
     }
 }
