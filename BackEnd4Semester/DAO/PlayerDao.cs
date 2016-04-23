@@ -19,7 +19,8 @@ namespace DAO
             this.dba = new DBAccess();
         }
 
-        public int CreatePlayer(string username, string password, string firstname, string lastname, string email, int admPri, string type, int number, int gamesplayed, int goals, int penalties)
+        public int CreatePlayer(string username, string password, string firstname, string lastname, string email, int admPri,
+            string type, int number, int gamesplayed, int goals, int penalties)
         {
             int rc = -1;
             UserDAO uDao = new UserDAO();
@@ -30,7 +31,8 @@ namespace DAO
             using (SqlCommand cmd = dba.GetDbCommand(sql))
             {
                 int id = uDao.CreateUser(true, username, password, firstname, lastname, email, admPri, type);
-                try {
+                try
+                {
                     cmd.Parameters.Clear();
                     cmd.Parameters.AddWithValue("@id", id).SqlDbType = SqlDbType.TinyInt;
                     cmd.Parameters.AddWithValue("@number", number).SqlDbType = SqlDbType.TinyInt;
@@ -78,27 +80,40 @@ namespace DAO
 
             return p;
         }
-
-        public int UpdatePlayer(Player player, string oldFirstname, string oldLastname)
+        /*
+         * !!!TODO: Type isnt being updated. I do not know if it ought to be updated.
+         */
+        public int UpdatePlayer(string username, string password, string firstname, string lastname, string email, int admPri,
+            int number, int gamesplayed, int goals, int penalties, string oldFirstname, string oldLastname)
         {
             int rc = -1;
-            string sql = "UPDATE player SET username=@username, password=@password, firstname=@firstname, lastname=@lastname, email=@email, adminPrivilege=@admindPrivilege, number=@number, gamesPlayed=@gamesPlayed, goals=@goals, penalties=@penalties " +
-                "WHERE firstname=@oldFirstname AND lastname=@oldLastname";
+            string sql = "BEGIN TRANSACTION; "
+                        + "UPDATE Users "
+                        + "SET username=@username, password=@password, firstname=@firstname, lastname=@lastname, email=@email, adminPrivilege=@adminPrivilege "
+                        + "FROM Users u, Player p "
+                        + "WHERE firstname = @oldFirstname AND lastname = @oldLastname; "
+                        + "UPDATE Player "
+                        + "SET number=@number, gamesPlayed=@gamesPlayed, goals=@goals, penalties=@penalties "
+                        + "FROM Player p, Users u "
+                        + "WHERE p.id=(SELECT Users.id FROM Users WHERE firstname=@firstname AND lastname=@lastname); "
+                        + "COMMIT;";
 
             using (SqlCommand cmd = dba.GetDbCommand(sql))
             {
                 try
                 {
-                    cmd.Parameters.AddWithValue("@username", player.UserName).SqlDbType = SqlDbType.VarChar;
-                    cmd.Parameters.AddWithValue("@password", player.Password).SqlDbType = SqlDbType.VarChar;
-                    cmd.Parameters.AddWithValue("@firstname", player.FirstName).SqlDbType = SqlDbType.VarChar;
-                    cmd.Parameters.AddWithValue("@lastname", player.LastName).SqlDbType = SqlDbType.VarChar;
-                    cmd.Parameters.AddWithValue("@email", player.Email).SqlDbType = SqlDbType.VarChar;
-                    cmd.Parameters.AddWithValue("@adminPrivilege", player.AdminPrivilege).SqlDbType = SqlDbType.TinyInt;
-                    cmd.Parameters.AddWithValue("@number", player.Number).SqlDbType = SqlDbType.TinyInt;
-                    cmd.Parameters.AddWithValue("@gamesPlayed", player.GamesPlayed).SqlDbType = SqlDbType.TinyInt;
-                    cmd.Parameters.AddWithValue("@goals", player.Goals).SqlDbType = SqlDbType.TinyInt;
-                    cmd.Parameters.AddWithValue("@penalties", player.Penalties).SqlDbType = SqlDbType.TinyInt;
+                    cmd.Parameters.AddWithValue("@username", username).SqlDbType = SqlDbType.VarChar;
+                    cmd.Parameters.AddWithValue("@password", password).SqlDbType = SqlDbType.VarChar;
+                    cmd.Parameters.AddWithValue("@firstname", firstname).SqlDbType = SqlDbType.VarChar;
+                    cmd.Parameters.AddWithValue("@lastname", lastname).SqlDbType = SqlDbType.VarChar;
+                    cmd.Parameters.AddWithValue("@email", email).SqlDbType = SqlDbType.VarChar;
+                    cmd.Parameters.AddWithValue("@adminPrivilege", admPri).SqlDbType = SqlDbType.Int;
+                    cmd.Parameters.AddWithValue("@number", number).SqlDbType = SqlDbType.Int;
+                    cmd.Parameters.AddWithValue("@gamesPlayed", gamesplayed).SqlDbType = SqlDbType.Int;
+                    cmd.Parameters.AddWithValue("@goals", goals).SqlDbType = SqlDbType.Int;
+                    cmd.Parameters.AddWithValue("@penalties", penalties).SqlDbType = SqlDbType.Int;
+                    cmd.Parameters.AddWithValue("@oldFirstname", oldFirstname).SqlDbType = SqlDbType.VarChar;
+                    cmd.Parameters.AddWithValue("@oldLastname", oldLastname).SqlDbType = SqlDbType.VarChar;
 
                     rc = cmd.ExecuteNonQuery();
                 }
