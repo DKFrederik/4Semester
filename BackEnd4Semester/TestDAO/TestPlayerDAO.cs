@@ -23,32 +23,13 @@ namespace TestDAO
         [TestMethod]
         public void TestFindPlayer()
         {
-            string firstname = "testFindPlayer";
-            string lastname = "testFindPlayer";
-            Assert.IsNotNull(pdao.FindPlayer(firstname, lastname));
+            string email = "PlayerForTestingFind";
+            Assert.IsNotNull(pdao.FindPlayer(email));
         }
         [TestMethod]
         public void TestCreatePlayer()
         {
-            Player player = new Player
-            {
-                //username, password, firstname, lastname, email, adminPrivilege, type, number, gamesPlayed, goals, penalties
-
-                UserName = "TestPlayer",
-                Password = "TestPlayer",
-                FirstName = "TestPlayer",
-                LastName = "TestPlayer",
-                Email = "TestPlayer",
-                AdminPrivilege = -1,
-                Type = "User",
-                Number = 0,
-                GamesPlayed = 0,
-                Goals = 0,
-                Penalties = 0
-            };
-
-
-            Assert.AreNotEqual(-1, pdao.CreatePlayer(player));
+            Assert.AreNotEqual(-1, pdao.CreatePlayer("PlayerForTestingCreate", "PlayerForTestingCreate", "PlayerForTestingCreate", "PlayerForTestingCreate", "PlayerForTestingCreate", -1, "PlayerForTestingCreate", 0, 0, 0, 0));
         }
 
         [TestMethod]
@@ -77,7 +58,7 @@ namespace TestDAO
         [TestMethod]
         public void TestDeletePlayer()
         {
-            string email = "TestEmail";
+            string email = "PlayerForTestingDelete";
 
             Assert.AreNotEqual(-1, pdao.DeletePlayer(email));
         }

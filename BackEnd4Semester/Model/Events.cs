@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace Model
 {
-    public class Events : ContentInfo
+    public abstract class Events : ContentInfo
     {
+        public Events() { }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
     }

@@ -13,30 +13,35 @@ namespace DAO
     public class EventsDao
     {
         private DBAccess dba;
+        private ContentInfoDAO ctDao;
 
         public EventsDao()
         {
             this.dba = new DBAccess();
+            ctDao = new ContentInfoDAO();
         }
 
-        public int CreateEvent(Events newEvent)
+        public int CreateEvent(string title, User author, DateTime date, string content, 
+                                Boolean isPublic, DateTime startTime, DateTime endTime, string eventType)
         {
-            int rc = -1;
+            int rc = -1;    //Rowcount indicating whether or not a table was affected (nr. of rows affected)
+            int ctId = -1;  //The ID returned from grandparrent ContentInfo.
 
-            string sql = "INSERT INTO events(title, author, date, content, isPublic, startTime, endTime)" +
-                "values(@title, @author, @date, @content, @isPublic, @startTime, @endTime)";
+            ContentInfoDAO ctDao = new ContentInfoDAO();
+
+            ctId = ctDao.CreateContentInfo(title, author, date, content, isPublic, "Event");
+
+            string sql = "INSERT INTO event(id, starttime, endtime, eventType)" +
+                "values(@ctId, @starttime, @endtime, @eventType)";
             using (SqlCommand cmd = dba.GetDbCommand(sql))
             {
                 try
                 {
                     cmd.Parameters.Clear();
-                    cmd.Parameters.AddWithValue("@title", newEvent.Title).SqlDbType = SqlDbType.VarChar;
-                    cmd.Parameters.AddWithValue("@author", newEvent.Author).SqlDbType = SqlDbType.VarChar;
-                    cmd.Parameters.AddWithValue("@date", newEvent.Date).SqlDbType = SqlDbType.Date;
-                    cmd.Parameters.AddWithValue("@content", newEvent.Content).SqlDbType = SqlDbType.VarChar;
-                    cmd.Parameters.AddWithValue("@isPublic", newEvent.IsPublic).SqlDbType = SqlDbType.Bit;
-                    cmd.Parameters.AddWithValue("@starTime", newEvent.StartTime).SqlDbType = SqlDbType.VarChar;
-                    cmd.Parameters.AddWithValue("@endTime", newEvent.EndTime).SqlDbType = SqlDbType.VarChar;
+                    cmd.Parameters.AddWithValue("@ctId", ctId).SqlDbType = SqlDbType.Int;
+                    cmd.Parameters.AddWithValue("@starttime", startTime).SqlDbType = SqlDbType.DateTime;
+                    cmd.Parameters.AddWithValue("@endtime", endTime).SqlDbType = SqlDbType.DateTime;
+                    cmd.Parameters.AddWithValue("@eventType", eventType).SqlDbType = SqlDbType.VarChar;
 
                     rc = cmd.ExecuteNonQuery();
                 }
@@ -45,14 +50,33 @@ namespace DAO
                     throw e;
                 }
             }
-            return rc;
+
+            if (rc > 0)
+            {
+                return ctId;
+            }
+            else {
+                return -1;
+            }
         }
 
-        public Events FindEvent(string title)
+        public string buildEventQuery()
         {
-            Events foundEvents = null;
+            return (ctDao.buildContentQuery() + ", e.startTime, e.endTime");
+        }
 
-            string sql = "SELECT * FROM events WHERE title=@title";
+        public Events buildPartialObject(SqlDataReader sdr, Events obj)
+        {
+            obj = (Events)ctDao.buildPartialObject(sdr, obj);
+            obj.StartTime= sdr.GetDateTime("startTime");
+            obj.EndTime = sdr.GetDateTime("endTime");
+            return obj;
+        }
+        public Events FindEvents(string title)
+        {
+            Events foundEvent = null;
+
+            string sql = "SELECT " + ctDao.buildContentQuery() + ", e.startTime, e.endTime FROM events WHERE title=@title";
             using (SqlCommand cmd = dba.GetDbCommand(sql))
             {
                 cmd.Parameters.AddWithValue("@title", title).SqlDbType = SqlDbType.VarChar;
@@ -63,16 +87,28 @@ namespace DAO
                     {
                         while (reader.Read())
                         {
-                            foundEvents = new Events()
+                            if (reader.GetString("eventType").Equals("match"))
                             {
-                                Title = reader.GetString("title"),
-                                Author = reader.GetString("author"),
-                                Date = reader.GetDateTime("date"),
-                                Content = reader.GetString("content"),
-                                IsPublic = reader.GetBoolean("isPublic"),
-                                StartTime = reader.GetDateTime("startTime"),
-                                EndTime = reader.GetDateTime("endTime")
-                            };
+                                foundEvent = new Match(){
+                                    Opponent = reader.GetString("opponent"),
+                                    HomeGoal = reader.GetInt32("homegoals"),
+                                    AwayGoal = reader.GetInt32("awaygoals")
+                                };
+                            }
+                            else if(reader.GetString("eventType").Equals("trainingSession"))
+                            {
+                                foundEvent = new TrainingSession(){
+                                    Trainer = reader.GetString("trainer")
+                                };
+                            }
+ 
+                            foundEvent.Title = reader.GetString("title");
+                            foundEvent.Author = null; //TODO reference
+                            foundEvent.Date = reader.GetDateTime("date");
+                            foundEvent.Content = reader.GetString("content");
+                            foundEvent.IsPublic = reader.GetBoolean("isPublic");
+                            foundEvent.StartTime = reader.GetDateTime("startTime");
+                            foundEvent.EndTime = reader.GetDateTime("endTime");
                         }
                     }
                     catch (Exception e)
@@ -83,7 +119,7 @@ namespace DAO
                 cmd.Parameters.Clear();
             }
 
-            return foundEvents;
+            return foundEvent;
         }
 
         public int UpdateEvent(Events events, string oldTitle)

@@ -52,10 +52,16 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="TestEventDao.cs" />
+    <Compile Include="TestMatchDao.cs" />
+    <Compile Include="TestNewsDao.cs" />
     <Compile Include="TestUserDAO.cs" />
     <Compile Include="TestDBAccess.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestPlayerDAO.cs" />
+    <Compile Include="TestContentInfoDAO.cs" />
+    <Compile Include="TestTrainingSessionDAO.cs" />
+    <Compile Include="TestTeamDAO.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DAO\DAO.csproj">

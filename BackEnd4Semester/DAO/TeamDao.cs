@@ -43,7 +43,7 @@ namespace DAO
             return rc;
         }
 
-        public Team FindTeam(string name)
+        public Team FindTeam(string name, bool retrieveAssoc)
         {
             Team foundTeam = null;
 
@@ -58,11 +58,46 @@ namespace DAO
                     {
                         while (reader.Read())
                         {
-                            foundTeam = new Team()
-                            {
-                                Name = reader.GetString("name"),
-                                Type = reader.GetString("type"),
-                            };
+                            foundTeam = BuildTeam(reader);
+                        }
+                        if (foundTeam != null && retrieveAssoc)
+                        {
+
+                            foundTeam.Players = GetPlayers(foundTeam.Id);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        throw e;
+                    }
+                }
+                cmd.Parameters.Clear();
+            }
+
+            return foundTeam;
+        }
+
+        public Team FindTeam(int id, bool retrieveAssoc)
+        {
+            Team foundTeam = null;
+
+            string sql = "SELECT * FROM team WHERE id=@id";
+            using (SqlCommand cmd = dba.GetDbCommand(sql))
+            {
+                cmd.Parameters.AddWithValue("@id", id).SqlDbType = SqlDbType.Int;
+
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    try
+                    {
+                        while (reader.Read())
+                        {
+                            foundTeam = BuildTeam(reader);
+                        }
+                        if (foundTeam != null && retrieveAssoc)
+                        {
+
+                            foundTeam.Players = GetPlayers(foundTeam.Id);
                         }
                     }
                     catch (Exception e)
@@ -120,6 +155,133 @@ namespace DAO
                 }
             }
             return rc;
+        }
+
+        public int AddPlayer(int playerId, int teamId)
+        {
+            int rc = -1;
+            string sql = "INSERT INTO PlayerTeam(playerId, teamId) "
+                    + "VALUES(@playerId, @teamId)";
+            using(SqlCommand cmd = dba.GetDbCommand(sql))
+            {
+                try
+                {
+                    cmd.Parameters.AddWithValue("@playerId", playerId).SqlDbType = SqlDbType.Int;
+                    cmd.Parameters.AddWithValue("@teamId", teamId).SqlDbType = SqlDbType.Int;
+
+                    rc = cmd.ExecuteNonQuery();
+                }
+                catch(SqlException e)
+                {
+                    throw e;
+                }
+
+            }
+
+            return rc; 
+        }
+
+        public int RemovePlayer(int playerId, int teamId)
+        {
+            int rc = -1;
+            string sql = "DELETE FROM PlayerTeam WHERE playerId=@playerId AND teamId=@teamId";
+            using(SqlCommand cmd = dba.GetDbCommand(sql))
+            {
+                try
+                {
+                    cmd.Parameters.AddWithValue("@playerId", playerId).SqlDbType = SqlDbType.Int;
+                    cmd.Parameters.AddWithValue("@teamId", teamId).SqlDbType = SqlDbType.Int;
+
+                    rc = cmd.ExecuteNonQuery();
+                }
+                catch(SqlException e)
+                {
+                    throw e;
+                }
+            }
+
+            return rc;
+        }
+
+        private List<Player> GetPlayers(int teamId)
+        {
+            List<Player> p = new List<Player>();
+            PlayerDao pDao = new PlayerDao();
+
+            string sql = "SELECT u.id, u.adminPrivilege, u.email, u.firstname, u.lastname, u.type, u.username, "
+                        + "p.number, p.gamesPlayed, p.goals, p.penalties "
+                        + "FROM PlayerTeam pt "
+                        + "JOIN Users u ON pt.playerId = u.id "
+                        + "JOIN Player p ON pt.playerId = p.id "
+                        + "WHERE pt.teamId = @teamId ";
+
+            using (SqlCommand cmd = dba.GetDbCommand(sql))
+            {
+                try
+                {
+                    cmd.Parameters.AddWithValue("@teamId", teamId).SqlDbType = SqlDbType.Int;
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            p.Add(BuildPlayer(reader));
+                        }
+                    }
+                }
+                catch(SqlException e)
+                {
+                    throw e;
+                }
+            }
+                return p;
+        }
+
+        private Team BuildTeam(SqlDataReader r)
+        {
+            Team t = null;
+            try
+            {
+                t = new Team()
+                {
+                    Id = r.GetInt32("id"),
+                    Name = r.GetString("name"),
+                    Type = r.GetString("type")
+                };
+            }
+            catch(SqlException e)
+            {
+                throw e;
+            }
+
+            return t;
+        }
+
+        private Player BuildPlayer(SqlDataReader r)
+        {
+            Player p = null;
+            try
+            {
+                p = new Player()
+                {
+                    Id = r.GetInt32("id"),
+                    UserName = r.GetString("username"),
+                    FirstName = r.GetString("firstname"),
+                    LastName = r.GetString("lastname"),
+                    Email = r.GetString("email"),
+                    AdminPrivilege = r.GetInt32("adminPrivilege"),
+                    Number = r.GetInt32("number"),
+                    GamesPlayed = r.GetInt32("gamesPlayed"),
+                    Goals = r.GetInt32("goals"),
+                    Penalties = r.GetInt32("penalties")
+                };
+            }
+            catch(SqlException e)
+            {
+                throw e;
+            }
+
+            return p;
         }
     }
 }

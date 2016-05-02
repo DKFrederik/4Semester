@@ -13,50 +13,53 @@ namespace DAO
     public class TrainingSessionDao
     {
         private DBAccess dba;
+        private EventsDao eDao;
 
         public TrainingSessionDao()
         {
             this.dba = new DBAccess();
+            eDao = new EventsDao();
         }
 
-        public int CreateTrainingSession(TrainingSession newTrainingSession)
+        public Boolean CreateTrainingSession(TrainingSession ts)
         {
-            int rc = -1;
+            bool success = false;
+            EventsDao eDao = new EventsDao();
 
-            string sql = "INSERT INTO trainingSession(title, author, date, content, isPublic, startTime, endTime, trainer)" +
-                "values(@title, @author, @date, @content, @isPublic, @startTime, @endTime, @trainer)";
+            int eId = eDao.CreateEvent(ts.Title, ts.Author, ts.Date, ts.Content,
+                                ts.IsPublic, ts.StartTime, ts.EndTime, "trainingSession");
+
+
+            string sql = "INSERT INTO trainingSession(id, trainer)" +
+                "values(@eid, @trainer)";
             using (SqlCommand cmd = dba.GetDbCommand(sql))
             {
                 try
                 {
                     cmd.Parameters.Clear();
-                    cmd.Parameters.AddWithValue("@title", newTrainingSession.Title).SqlDbType = SqlDbType.VarChar;
-                    cmd.Parameters.AddWithValue("@author", newTrainingSession.Author).SqlDbType = SqlDbType.VarChar;
-                    cmd.Parameters.AddWithValue("@date", newTrainingSession.Date).SqlDbType = SqlDbType.Date;
-                    cmd.Parameters.AddWithValue("@content", newTrainingSession.Content).SqlDbType = SqlDbType.VarChar;
-                    cmd.Parameters.AddWithValue("@isPublic", newTrainingSession.IsPublic).SqlDbType = SqlDbType.Bit;
-                    cmd.Parameters.AddWithValue("@starTime", newTrainingSession.StartTime).SqlDbType = SqlDbType.VarChar;
-                    cmd.Parameters.AddWithValue("@endTime", newTrainingSession.EndTime).SqlDbType = SqlDbType.VarChar;
-                    cmd.Parameters.AddWithValue("@trainer", newTrainingSession.Trainer).SqlDbType = SqlDbType.VarChar;
+                    cmd.Parameters.AddWithValue("@eid", eId).SqlDbType = SqlDbType.Int;
+                    cmd.Parameters.AddWithValue("@trainer", ts.Trainer).SqlDbType = SqlDbType.VarChar;
 
-                    rc = cmd.ExecuteNonQuery();
+                    cmd.ExecuteNonQuery();
+                    success = true;
                 }
                 catch (Exception e)
                 {
                     throw e;
                 }
             }
-            return rc;
+            return success;
         }
 
-        public TrainingSession FindTrainingSession(string title)
+        public List<TrainingSession> FindTrainingSessions(DateTime date)
         {
-            TrainingSession foundTrainingSession = null;
+            List<TrainingSession> tList = new List<TrainingSession>();
 
-            string sql = "SELECT * FROM events WHERE title=@title";
+            string sql = "SELECT " + eDao.buildEventQuery() + ", t.trainer FROM trainingSession t join Event e on t.id = e.id join ContentInfo c on c.id = e.id "
+                + "where c.date = @date";
             using (SqlCommand cmd = dba.GetDbCommand(sql))
             {
-                cmd.Parameters.AddWithValue("@title", title).SqlDbType = SqlDbType.VarChar;
+                cmd.Parameters.AddWithValue("@date", date).SqlDbType = SqlDbType.DateTime;
 
                 using (SqlDataReader reader = cmd.ExecuteReader())
                 {
@@ -64,17 +67,11 @@ namespace DAO
                     {
                         while (reader.Read())
                         {
-                            foundTrainingSession = new TrainingSession()
-                            {
-                                Title = reader.GetString("title"),
-                                Author = reader.GetString("author"),
-                                Date = reader.GetDateTime("date"),
-                                Content = reader.GetString("content"),
-                                IsPublic = reader.GetBoolean("isPublic"),
-                                StartTime = reader.GetDateTime("startTime"),
-                                EndTime = reader.GetDateTime("endTime"),
-                                Trainer = reader.GetString("trainer")            
-                            };
+                            TrainingSession t = new TrainingSession();
+                            t = (TrainingSession) eDao.buildPartialObject(reader, t);
+                            t.Trainer = reader.GetString("trainer");
+
+                            tList.Add(t);
                         }
                     }
                     catch (Exception e)
@@ -85,7 +82,7 @@ namespace DAO
                 cmd.Parameters.Clear();
             }
 
-            return foundTrainingSession;
+            return tList;
         }
 
         public int UpdateTrainingSession(TrainingSession trainingSession, string oldTitle)

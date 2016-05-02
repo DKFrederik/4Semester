@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Model;
 using System.Data.SqlClient;
 using System.Data;
+using System.Transactions;
 
 namespace DAO
 {
@@ -18,28 +19,24 @@ namespace DAO
             this.dba = new DBAccess();
         }
 
-        public int CreatePlayer(Player newPlayer)
+        public int CreatePlayer(string username, string password, string firstname, string lastname, string email, int admPri, string type, int number, int gamesplayed, int goals, int penalties)
         {
             int rc = -1;
+            UserDAO uDao = new UserDAO();
 
-            string sql = "INSERT INTO player(username, password, firstname, lastname, email, adminPrivilege, type, number, gamesPlayed, goals, penalties)" +
-                "values(@username, @password, @firstname, @lastname, @email, @adminPrivilege, @type, @number, @gamesPlayed, @goals, @penalties)";
+            string sql = "INSERT INTO player(id, number, gamesPlayed, goals, penalties)" +
+                "values(@id, @number, @gamesPlayed, @goals, @penalties);";
+
             using (SqlCommand cmd = dba.GetDbCommand(sql))
             {
-                try
-                {
+                int id = uDao.CreateUser(true, username, password, firstname, lastname, email, admPri, type);
+                try {
                     cmd.Parameters.Clear();
-                    cmd.Parameters.AddWithValue("@username", newPlayer.UserName).SqlDbType = SqlDbType.VarChar;
-                    cmd.Parameters.AddWithValue("@password", newPlayer.Password).SqlDbType = SqlDbType.VarChar;
-                    cmd.Parameters.AddWithValue("@firstname", newPlayer.FirstName).SqlDbType = SqlDbType.VarChar;
-                    cmd.Parameters.AddWithValue("@lastname", newPlayer.LastName).SqlDbType = SqlDbType.VarChar;
-                    cmd.Parameters.AddWithValue("@email", newPlayer.Email).SqlDbType = SqlDbType.VarChar;
-                    cmd.Parameters.AddWithValue("@adminPrivilege", newPlayer.AdminPrivilege).SqlDbType = SqlDbType.Int;
-                    cmd.Parameters.AddWithValue("@type", newPlayer.Type).SqlDbType = SqlDbType.VarChar;
-                    cmd.Parameters.AddWithValue("@number", newPlayer.Number).SqlDbType = SqlDbType.Int;
-                    cmd.Parameters.AddWithValue("@gamesPlayed", newPlayer.GamesPlayed).SqlDbType = SqlDbType.Int;
-                    cmd.Parameters.AddWithValue("@goals", newPlayer.Goals).SqlDbType = SqlDbType.Int;
-                    cmd.Parameters.AddWithValue("@penalties", newPlayer.Penalties).SqlDbType = SqlDbType.Int;
+                    cmd.Parameters.AddWithValue("@id", id).SqlDbType = SqlDbType.TinyInt;
+                    cmd.Parameters.AddWithValue("@number", number).SqlDbType = SqlDbType.TinyInt;
+                    cmd.Parameters.AddWithValue("@gamesPlayed", gamesplayed).SqlDbType = SqlDbType.TinyInt;
+                    cmd.Parameters.AddWithValue("@goals", goals).SqlDbType = SqlDbType.TinyInt;
+                    cmd.Parameters.AddWithValue("@penalties", penalties).SqlDbType = SqlDbType.TinyInt;
 
                     rc = cmd.ExecuteNonQuery();
                 }
@@ -51,15 +48,16 @@ namespace DAO
             return rc;
         }
 
-        public User FindPlayer(string firstname, string lastname)
+        public Player FindPlayer(string email)
         {
-            User foundPlayer = null;
+            Player p = null;
+            string sql = "select p.id, p.number, p.gamesPlayed, p.goals, p.penalties, "
+                + "u.adminPrivilege, u.email, u.firstname, u.lastname, u.type, u.username "
+                + "FROM Player p join Users u on p.id = u.id where u.email = @email";
 
-            string sql = "SELECT * FROM player WHERE firstname=@firstname AND lastname=@lastname";
             using (SqlCommand cmd = dba.GetDbCommand(sql))
             {
-                cmd.Parameters.AddWithValue("@firstname", firstname).SqlDbType = SqlDbType.VarChar;
-                cmd.Parameters.AddWithValue("@lastname", lastname).SqlDbType = SqlDbType.VarChar;
+                cmd.Parameters.AddWithValue("@email", email).SqlDbType = SqlDbType.VarChar;
 
                 using (SqlDataReader reader = cmd.ExecuteReader())
                 {
@@ -67,11 +65,10 @@ namespace DAO
                     {
                         while (reader.Read())
                         {
-                            foundPlayer = new Player()
+                            p = new Player()
                             {
                                 Id = reader.GetInt32("id"),
                                 UserName = reader.GetString("username"),
-                                Password = reader.GetString("password"),
                                 FirstName = reader.GetString("firstname"),
                                 LastName = reader.GetString("lastname"),
                                 Email = reader.GetString("email"),
@@ -91,7 +88,7 @@ namespace DAO
                 cmd.Parameters.Clear();
             }
 
-            return foundPlayer;
+            return p;
         }
 
         public int UpdatePlayer(Player player, string oldFirstname, string oldLastname)
@@ -129,7 +126,7 @@ namespace DAO
         public int DeletePlayer(string email)
         {
             int rc = -1;
-            string sql = "DELETE FROM player WHERE email=@email";
+            string sql = "DELETE FROM Users WHERE email = @email";
 
             using (SqlCommand cmd = dba.GetDbCommand(sql))
             {

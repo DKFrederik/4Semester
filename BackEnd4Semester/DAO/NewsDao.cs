@@ -8,34 +8,40 @@ using System.Data.SqlClient;
 using System.Data;
 using Model;
 
+
 namespace DAO
 {
     public class NewsDao
     {
+        ContentInfoDAO ctDao;
         private DBAccess dba;
 
         public NewsDao()
         {
             this.dba = new DBAccess();
+            ctDao = new ContentInfoDAO();
         }
 
-        public int CreateNews(News newNews)
+        /// <summary>
+        /// Creates a new tubble in the database 
+        /// </summary>
+        /// <param name="newNews"></param>
+        /// <returns></returns>
+        public int CreateNews(News news)
         {
             int rc = -1;
 
-            string sql = "INSERT INTO news(title, author, date, content, isPublic, picture)" +
-                "values(@title, @author, @date, @content, @isPublic, @picture)";
+            int ctId = ctDao.CreateContentInfo(news.Title, news.Author, news.Date, news.Content, news.IsPublic, "news");
+
+            string sql = "INSERT INTO news(id, pictureURL)" +
+                "values(@ctId, @picture)";
             using (SqlCommand cmd = dba.GetDbCommand(sql))
             {
                 try
                 {
                     cmd.Parameters.Clear();
-                    cmd.Parameters.AddWithValue("@title", newNews.Title).SqlDbType = SqlDbType.VarChar;
-                    cmd.Parameters.AddWithValue("@author", newNews.Author).SqlDbType = SqlDbType.VarChar;
-                    cmd.Parameters.AddWithValue("@date", newNews.Date).SqlDbType = SqlDbType.Date;
-                    cmd.Parameters.AddWithValue("@content", newNews.Content).SqlDbType = SqlDbType.VarChar;
-                    cmd.Parameters.AddWithValue("@isPublic", newNews.IsPublic).SqlDbType = SqlDbType.Bit;
-                    cmd.Parameters.AddWithValue("@picture", newNews.Picture).SqlDbType = SqlDbType.VarChar;
+                    cmd.Parameters.AddWithValue("@ctId", ctId).SqlDbType = SqlDbType.Int;
+                    cmd.Parameters.AddWithValue("@picture", news.Picture).SqlDbType = SqlDbType.VarChar;
 
                     rc = cmd.ExecuteNonQuery();
                 }
@@ -47,14 +53,15 @@ namespace DAO
             return rc;
         }
 
-        public News FindNews(string title)
+        public List<News> FindNews(DateTime date)
         {
-            News foundNews = null;
+            News n = null;
+            List<News> newsList = new List<News>();
 
-            string sql = "SELECT * FROM news WHERE title=@title";
+            string sql = "SELECT " + ctDao.buildContentQuery() + ", n.pictureURL FROM News n join ContentInfo c ON c.id = n.id WHERE c.date=@date";
             using (SqlCommand cmd = dba.GetDbCommand(sql))
             {
-                cmd.Parameters.AddWithValue("@title", title).SqlDbType = SqlDbType.VarChar;
+                cmd.Parameters.AddWithValue("@date", date).SqlDbType = SqlDbType.DateTime;
 
                 using (SqlDataReader reader = cmd.ExecuteReader())
                 {
@@ -62,15 +69,11 @@ namespace DAO
                     {
                         while (reader.Read())
                         {
-                            foundNews = new News()
-                            {
-                                Title = reader.GetString("title"),
-                                Author = reader.GetString("author"),
-                                Date = reader.GetDateTime("date"),
-                                Content = reader.GetString("content"),
-                                IsPublic = reader.GetBoolean("isPublic"),
-                                Picture = reader.GetString("picture")
-                            };
+                            n = new News();
+                            n = (News) ctDao.buildPartialObject(reader, n);
+                            n.Picture = reader.GetString("pictureURL");
+
+                            newsList.Add(n);
                         }
                     }
                     catch (Exception e)
@@ -81,7 +84,7 @@ namespace DAO
                 cmd.Parameters.Clear();
             }
 
-            return foundNews;
+            return newsList;
         }
 
         public int UpdateNews(News news, string oldTitle)

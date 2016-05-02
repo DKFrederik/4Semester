@@ -19,26 +19,27 @@ namespace DAO
             this.dba = new DBAccess();
         }
 
-        public int CreateMatch(Match newMatch)
+        public int CreateMatch(Match m)
         {
             int rc = -1;
 
-            string sql = "INSERT INTO match(title, author, date, content, isPublic, startTime, endTime, opponent, matchScore)" +
-                "values(@title, @author, @date, @content, @isPublic, @startTime, @endTime, @opponent, @matchScore)";
+            EventsDao eDao = new EventsDao();
+
+            int eId = eDao.CreateEvent(m.Title, m.Author, m.Date, m.Content,
+                                m.IsPublic, m.StartTime, m.EndTime, "match");
+
+            string sql = "INSERT INTO match(id, teamid, opponent, homegoals, awaygoals)" +
+                "values(@id, (select id FROM Team where name = @teamname), @opponent, @homegoals, @awaygoals)";
             using (SqlCommand cmd = dba.GetDbCommand(sql))
             {
                 try
                 {
                     cmd.Parameters.Clear();
-                    cmd.Parameters.AddWithValue("@title", newMatch.Title).SqlDbType = SqlDbType.VarChar;
-                    cmd.Parameters.AddWithValue("@author", newMatch.Author).SqlDbType = SqlDbType.VarChar;
-                    cmd.Parameters.AddWithValue("@date", newMatch.Date).SqlDbType = SqlDbType.Date;
-                    cmd.Parameters.AddWithValue("@content", newMatch.Content).SqlDbType = SqlDbType.VarChar;
-                    cmd.Parameters.AddWithValue("@isPublic", newMatch.IsPublic).SqlDbType = SqlDbType.Bit;
-                    cmd.Parameters.AddWithValue("@starTime", newMatch.StartTime).SqlDbType = SqlDbType.VarChar;
-                    cmd.Parameters.AddWithValue("@endTime", newMatch.EndTime).SqlDbType = SqlDbType.VarChar;
-                    cmd.Parameters.AddWithValue("@opponent", newMatch.Opponent).SqlDbType = SqlDbType.VarChar;
-                    cmd.Parameters.AddWithValue("@matchScore", newMatch.MatchScore).SqlDbType = SqlDbType.VarChar;
+                    cmd.Parameters.AddWithValue("@id", eId).SqlDbType = SqlDbType.Int;
+                    cmd.Parameters.AddWithValue("@teamname", m.Team.Name).SqlDbType = SqlDbType.VarChar;
+                    cmd.Parameters.AddWithValue("@opponent", m.Opponent).SqlDbType = SqlDbType.VarChar;
+                    cmd.Parameters.AddWithValue("@homegoals", m.HomeGoal).SqlDbType = SqlDbType.Int;
+                    cmd.Parameters.AddWithValue("@awaygoals", m.AwayGoal).SqlDbType = SqlDbType.Int;
 
                     rc = cmd.ExecuteNonQuery();
                 }
@@ -50,14 +51,18 @@ namespace DAO
             return rc;
         }
 
-        public Match FindMatch(string title)
+        public List<Match> FindMatches(DateTime date)
         {
-            Match foundMatch = null;
+            TeamDao tDao = new TeamDao();
+            EventsDao eDao = new EventsDao();
+            List<Match> matches = new List<Match>();
 
-            string sql = "SELECT * FROM match WHERE title=@title";
+            string sql = "SELECT " + eDao.buildEventQuery() + ", m.opponent, m.homegoals, m.awaygoals, m.teamId FROM match m join Event e on m.id = e.id join ContentInfo c on c.id = e.id "
+                + "where c.date = @date";
+
             using (SqlCommand cmd = dba.GetDbCommand(sql))
             {
-                cmd.Parameters.AddWithValue("@title", title).SqlDbType = SqlDbType.VarChar;
+                cmd.Parameters.AddWithValue("@date", date).SqlDbType = SqlDbType.DateTime;
 
                 using (SqlDataReader reader = cmd.ExecuteReader())
                 {
@@ -65,18 +70,14 @@ namespace DAO
                     {
                         while (reader.Read())
                         {
-                            foundMatch = new Match()
-                            {
-                                Title = reader.GetString("title"),
-                                Author = reader.GetString("author"),
-                                Date = reader.GetDateTime("date"),
-                                Content = reader.GetString("content"),
-                                IsPublic = reader.GetBoolean("isPublic"),
-                                StartTime = reader.GetDateTime("startTime"),
-                                EndTime = reader.GetDateTime("endTime"),
-                                Opponent = reader.GetString("opponent"),
-                                MatchScore = reader.GetString("matchScore")
-                            };
+                            Match m = new Match();
+                            m = (Match) eDao.buildPartialObject(reader, m);
+                            m.Opponent = reader.GetString("opponent");
+                            m.HomeGoal = reader.GetInt32("homegoals");
+                            m.AwayGoal = reader.GetInt32("awaygoals");
+                            m.Team = tDao.FindTeam(reader.GetInt32("teamId"),false);
+                            
+                            matches.Add(m);
                         }
                     }
                     catch (Exception e)
@@ -87,7 +88,55 @@ namespace DAO
                 cmd.Parameters.Clear();
             }
 
-            return foundMatch;
+            return matches;
+        }
+
+        public Match FindMatch(int id)
+        {
+            
+            TeamDao tDao = new TeamDao();
+
+            Match m = null;
+
+            string sql = "SELECT c.title, c.creatorId, c.date, c.content, c.IsPublic, e.startTime, e.endTime, m.opponent, m.homegoals, m.awaygoals, m.teamId FROM match m join Event e on m.id = e.id join ContentInfo c on c.id = e.id "
+                + "where c.id = @id";
+
+            using (SqlCommand cmd = dba.GetDbCommand(sql))
+            {
+                cmd.Parameters.AddWithValue("@id", id).SqlDbType = SqlDbType.DateTime;
+
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    try
+                    {
+                        while (reader.Read())
+                        {
+                            m = new Match()
+                            {
+                                Title = reader.GetString("title"),
+                                //Author = uDao.FindUser(reader.GetInt32("creatorId")),
+                                Date = reader.GetDateTime("date"),
+                                Content = reader.GetString("content"),
+                                IsPublic = reader.GetBoolean("isPublic"),
+                                StartTime = reader.GetDateTime("startTime"),
+                                EndTime = reader.GetDateTime("endTime"),
+                                Opponent = reader.GetString("opponent"),
+                                HomeGoal = reader.GetInt32("homegoals"),
+                                AwayGoal = reader.GetInt32("awaygoals"),
+                                Team = tDao.FindTeam(reader.GetInt32("teamId"), false)
+                            };
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        throw e;
+                    }
+                    
+                }
+                cmd.Parameters.Clear();
+            }
+
+            return m;
         }
 
         public int UpdateMatch(Match match, string oldTitle)
@@ -108,7 +157,7 @@ namespace DAO
                     cmd.Parameters.AddWithValue("@startTime", match.StartTime).SqlDbType = SqlDbType.VarChar;
                     cmd.Parameters.AddWithValue("@endTime", match.EndTime).SqlDbType = SqlDbType.VarChar;
                     cmd.Parameters.AddWithValue("@opponent", match.Opponent).SqlDbType = SqlDbType.VarChar;
-                    cmd.Parameters.AddWithValue("@matchScore", match.MatchScore).SqlDbType = SqlDbType.VarChar;
+                    cmd.Parameters.AddWithValue("@matchScore", match.HomeGoal).SqlDbType = SqlDbType.VarChar;
                     cmd.Parameters.AddWithValue("@oldTitle", oldTitle).SqlDbType = SqlDbType.VarChar;
 
                     rc = cmd.ExecuteNonQuery();
