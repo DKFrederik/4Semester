@@ -35,24 +35,20 @@ namespace TestDAO
         [TestMethod]
         public void TestUpdatePlayer()
         {
-            string oldFirstname = "TestPlayer";
-            string oldLastname = "TestPlayer";
+            string oldFirstname = "testUpdatePlayer";
+            string oldLastname = "testUpdatePlayer";
+            string un = "UpdatedPlayer";
+            string pw = "UpdatedPlayer";
+            string fn = "UpdatedPlayer";
+            string ln = "UpdatedPlayer";
+            string email = "UpdatedPlayer";
+            int ap = -1;
+            int no = 999;
+            int gp = 999;
+            int g = 999;
+            int p = 999;
 
-            Player player = new Player
-            {
-                UserName = "TestUpdatePlayer",
-                Password = "TestUpdatePlayer",
-                FirstName = "TestUpdatePlayer",
-                LastName = "TestUpdatePlayer",
-                Email = "TestUpdatePlayer",
-                AdminPrivilege = -1,
-                Number = 0,
-                GamesPlayed = 0,
-                Goals = 0,
-                Penalties = 0
-            };
-
-            Assert.AreNotEqual(-1, pdao.UpdatePlayer(player, oldFirstname, oldLastname));
+            Assert.AreNotEqual(-1, pdao.UpdatePlayer(un, pw, fn, ln, email, ap, no, gp, g, p, oldFirstname, oldLastname));
         }
 
         [TestMethod]

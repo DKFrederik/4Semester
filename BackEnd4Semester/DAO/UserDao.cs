@@ -71,16 +71,7 @@ namespace DAO
                     {
                         while (reader.Read())
                         {
-                            foundUser = new User()
-                            {
-                                Id = reader.GetInt32("id"),
-                                UserName = reader.GetString("username"),
-                                FirstName = reader.GetString("firstname"),
-                                LastName = reader.GetString("lastname"),
-                                Email = reader.GetString("email"),
-                                AdminPrivilege = reader.GetInt32("adminPrivilege"),
-                                Type = reader.GetString("type")
-                            };
+                            foundUser = BuildUser(reader);
                         }
                     }
                     catch (Exception e)
@@ -109,17 +100,7 @@ namespace DAO
                     {
                         while (reader.Read())
                         {
-                            foundUser = new User()
-                            {
-                                Id = reader.GetInt32("id"),
-                                UserName = reader.GetString("username"),
-                                Password = reader.GetString("password"),
-                                FirstName = reader.GetString("firstname"),
-                                LastName = reader.GetString("lastname"),
-                                Email = reader.GetString("email"),
-                                AdminPrivilege = reader.GetInt32("adminPrivilege"),
-                                Type = reader.GetString("type")
-                            };
+                            foundUser = BuildUser(reader);
                         }
                     }
                     catch (Exception e)
@@ -181,6 +162,30 @@ namespace DAO
                 }
             }
             return rc;
+        }
+
+        private User BuildUser(SqlDataReader r)
+        {
+            User u;
+            try
+            {
+                u = new User()
+                {
+                    Id = r.GetInt32("id"),
+                    UserName = r.GetString("username"),
+                    FirstName = r.GetString("firstname"),
+                    LastName = r.GetString("lastname"),
+                    Email = r.GetString("email"),
+                    AdminPrivilege = r.GetInt32("adminPrivilege"),
+                    Type = r.GetString("type")
+                };
+            }
+            catch(Exception e)
+            {
+                throw e;
+            }
+
+            return u;
         }
     }
 }
