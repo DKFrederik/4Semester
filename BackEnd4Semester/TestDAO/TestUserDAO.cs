@@ -29,7 +29,7 @@ namespace TestDAO
         [TestMethod]
         public void TestCreateUser()
         {
-            Assert.AreNotEqual(-1, udao.CreateUser(false, "TestUser", "TestUser", "TestUser", "TestUser", "TestUser", -1, "TestUser"));
+            Assert.AreNotEqual(-1, udao.CreateUser("TestUser", "TestUser", "TestUser", "TestUser", "TestUser", -1, "TestUser"));
         }
 
         [TestMethod]

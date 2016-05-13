@@ -20,26 +20,27 @@ namespace DAO
         }
 
         public int CreatePlayer(string username, string password, string firstname, string lastname, string email, int admPri,
-            string type, int number, int gamesplayed, int goals, int penalties)
+           string type, int number, int gamesplayed, int goals, int penalties)
         {
             int rc = -1;
-            UserDAO uDao = new UserDAO();
-
-            string sql = "INSERT INTO player(id, number, gamesPlayed, goals, penalties)" +
-                "values(@id, @number, @gamesPlayed, @goals, @penalties);";
+            string sql = "player_insert";
 
             using (SqlCommand cmd = dba.GetDbCommand(sql))
             {
-                int id = uDao.CreateUser(true, username, password, firstname, lastname, email, admPri, type);
                 try
                 {
-                    cmd.Parameters.Clear();
-                    cmd.Parameters.AddWithValue("@id", id).SqlDbType = SqlDbType.TinyInt;
+                    cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@number", number).SqlDbType = SqlDbType.TinyInt;
                     cmd.Parameters.AddWithValue("@gamesPlayed", gamesplayed).SqlDbType = SqlDbType.TinyInt;
                     cmd.Parameters.AddWithValue("@goals", goals).SqlDbType = SqlDbType.TinyInt;
                     cmd.Parameters.AddWithValue("@penalties", penalties).SqlDbType = SqlDbType.TinyInt;
-
+                    cmd.Parameters.AddWithValue("@username", username).SqlDbType = SqlDbType.VarChar;
+                    cmd.Parameters.AddWithValue("@password", password).SqlDbType = SqlDbType.VarChar;
+                    cmd.Parameters.AddWithValue("@firstname", firstname).SqlDbType = SqlDbType.VarChar;
+                    cmd.Parameters.AddWithValue("@lastname", lastname).SqlDbType = SqlDbType.VarChar;
+                    cmd.Parameters.AddWithValue("@email", email).SqlDbType = SqlDbType.VarChar;
+                    cmd.Parameters.AddWithValue("@type", type).SqlDbType = SqlDbType.VarChar;
+                    cmd.Parameters.AddWithValue("@adminPrivilege", admPri).SqlDbType = SqlDbType.Int;
                     rc = cmd.ExecuteNonQuery();
                 }
                 catch (Exception e)
@@ -50,12 +51,41 @@ namespace DAO
             return rc;
         }
 
+        //public int CreatePlayer(string username, string password, string firstname, string lastname, string email, int admPri,
+        //    string type, int number, int gamesplayed, int goals, int penalties)
+        //{
+        //    int rc = -1;
+        //    UserDAO uDao = new UserDAO();
+
+        //    string sql = "INSERT INTO player(id, number, gamesPlayed, goals, penalties)" +
+        //        "values(@id, @number, @gamesPlayed, @goals, @penalties);";
+
+        //    using (SqlCommand cmd = dba.GetDbCommand(sql))
+        //    {
+        //        int id = uDao.CreateUser(true, username, password, firstname, lastname, email, admPri, type);
+        //        try
+        //        {
+        //            cmd.Parameters.Clear();
+        //            cmd.Parameters.AddWithValue("@id", id).SqlDbType = SqlDbType.TinyInt;
+        //            cmd.Parameters.AddWithValue("@number", number).SqlDbType = SqlDbType.TinyInt;
+        //            cmd.Parameters.AddWithValue("@gamesPlayed", gamesplayed).SqlDbType = SqlDbType.TinyInt;
+        //            cmd.Parameters.AddWithValue("@goals", goals).SqlDbType = SqlDbType.TinyInt;
+        //            cmd.Parameters.AddWithValue("@penalties", penalties).SqlDbType = SqlDbType.TinyInt;
+
+        //            rc = cmd.ExecuteNonQuery();
+        //        }
+        //        catch (Exception e)
+        //        {
+        //            throw e;
+        //        }
+        //    }
+        //    return rc;
+        //}
+
         public Player FindPlayer(string email)
         {
             Player p = null;
-            string sql = "select p.id, p.number, p.gamesPlayed, p.goals, p.penalties, "
-                + "u.adminPrivilege, u.email, u.firstname, u.lastname, u.type, u.username "
-                + "FROM Player p join Users u on p.id = u.id where u.email = @email";
+            string sql = "SELECT * FROM PlayerView WHERE email=@email";
 
             using (SqlCommand cmd = dba.GetDbCommand(sql))
             {

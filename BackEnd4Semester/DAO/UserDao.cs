@@ -19,18 +19,16 @@ namespace DAO
             this.dba = new DBAccess();
         }
 
-        public int CreateUser(bool playerCreation, string username, string password, string firstname, string lastname, string email, int admPri, string type)
+        public int CreateUser(string username, string password, string firstname, string lastname, string email, int admPri, string type)
         {
             int res = -1;
 
-            string sql = "INSERT INTO users(username, password, firstname, lastname, email, type, adminPrivilege)" +
-                " values(@username, @password, @firstname, @lastname, @email, @type, @adminPrivilege); Select Scope_Identity()";
-
+            string sql = "user_insert";
             using (SqlCommand cmd = dba.GetDbCommand(sql))
             {
                 try
                 {
-                    cmd.Parameters.Clear();
+                    cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@username", username).SqlDbType = SqlDbType.VarChar;
                     cmd.Parameters.AddWithValue("@password", password).SqlDbType = SqlDbType.VarChar;
                     cmd.Parameters.AddWithValue("@firstname", firstname).SqlDbType = SqlDbType.VarChar;
@@ -39,14 +37,7 @@ namespace DAO
                     cmd.Parameters.AddWithValue("@type", type).SqlDbType = SqlDbType.VarChar;
                     cmd.Parameters.AddWithValue("@adminPrivilege", admPri).SqlDbType = SqlDbType.Int;
 
-                    if (playerCreation)
-                    {
-                        res = Convert.ToInt32(cmd.ExecuteScalar());
-                    }
-                    else
-                    {
                         res = cmd.ExecuteNonQuery();
-                    }
                 }
                 catch (Exception e)
                 {
