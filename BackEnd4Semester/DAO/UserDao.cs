@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DAO;
 using System.Data.SqlClient;
 using System.Data;
 using Model;
@@ -37,7 +32,7 @@ namespace DAO
                     cmd.Parameters.AddWithValue("@type", type).SqlDbType = SqlDbType.VarChar;
                     cmd.Parameters.AddWithValue("@adminPrivilege", admPri).SqlDbType = SqlDbType.Int;
 
-                        res = cmd.ExecuteNonQuery();
+                    res = cmd.ExecuteNonQuery();
                 }
                 catch (Exception e)
                 {
@@ -107,13 +102,13 @@ namespace DAO
         public int UpdateUser(User user, string oldFirstname, string oldLastname)
         {
             int rc = -1;
-            string sql = "UPDATE Users SET username=@username, password=@password, firstname=@firstname, lastname=@lastname, email=@email, adminPrivilege=@adminPrivilege, type=@type " +
-                "WHERE firstname=@oldFirstname AND lastname=@oldLastname";
+            string sql = "user_update";
 
             using (SqlCommand cmd = dba.GetDbCommand(sql))
             {
                 try
                 {
+                    cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@username", user.UserName).SqlDbType = SqlDbType.VarChar;
                     cmd.Parameters.AddWithValue("@password", user.Password).SqlDbType = SqlDbType.VarChar;
                     cmd.Parameters.AddWithValue("@firstname", user.FirstName).SqlDbType = SqlDbType.VarChar;

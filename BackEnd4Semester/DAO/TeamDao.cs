@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DAO;
 using System.Data.SqlClient;
 using System.Data;
 using Model;
@@ -23,12 +19,12 @@ namespace DAO
         {
             int rc = -1;
 
-            string sql = "INSERT INTO team(name, type)" +
-                "values(@name, @type)";
+            string sql = "team_insert";
             using (SqlCommand cmd = dba.GetDbCommand(sql))
             {
                 try
                 {
+                    cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.Clear();
                     cmd.Parameters.AddWithValue("@name", newTeam.Name).SqlDbType = SqlDbType.VarChar;
                     cmd.Parameters.AddWithValue("@type", newTeam.Type).SqlDbType = SqlDbType.VarChar;
@@ -114,13 +110,13 @@ namespace DAO
         public int UpdateTeam(Team team, string oldName)
         {
             int rc = -1;
-            string sql = "UPDATE team SET name=@name, type=@type" +
-                "WHERE name=@oldName";
+            string sql = "team_update";
 
             using (SqlCommand cmd = dba.GetDbCommand(sql))
             {
                 try
                 {
+                    cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@name", team.Name).SqlDbType = SqlDbType.VarChar;
                     cmd.Parameters.AddWithValue("@type", team.Type).SqlDbType = SqlDbType.VarChar;
                     cmd.Parameters.AddWithValue("@oldName", oldName).SqlDbType = SqlDbType.VarChar;
@@ -160,12 +156,12 @@ namespace DAO
         public int AddPlayer(int playerId, int teamId)
         {
             int rc = -1;
-            string sql = "INSERT INTO PlayerTeam(playerId, teamId) "
-                    + "VALUES(@playerId, @teamId)";
+            string sql = "team_addPlayer";
             using(SqlCommand cmd = dba.GetDbCommand(sql))
             {
                 try
                 {
+                    cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@playerId", playerId).SqlDbType = SqlDbType.Int;
                     cmd.Parameters.AddWithValue("@teamId", teamId).SqlDbType = SqlDbType.Int;
 
@@ -184,11 +180,12 @@ namespace DAO
         public int RemovePlayer(int playerId, int teamId)
         {
             int rc = -1;
-            string sql = "DELETE FROM PlayerTeam WHERE playerId=@playerId AND teamId=@teamId";
+            string sql = "team_removePlayer";
             using(SqlCommand cmd = dba.GetDbCommand(sql))
             {
                 try
                 {
+                    cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@playerId", playerId).SqlDbType = SqlDbType.Int;
                     cmd.Parameters.AddWithValue("@teamId", teamId).SqlDbType = SqlDbType.Int;
 
@@ -208,17 +205,13 @@ namespace DAO
             List<Player> p = new List<Player>();
             PlayerDao pDao = new PlayerDao();
 
-            string sql = "SELECT u.id, u.adminPrivilege, u.email, u.firstname, u.lastname, u.type, u.username, "
-                        + "p.number, p.gamesPlayed, p.goals, p.penalties "
-                        + "FROM PlayerTeam pt "
-                        + "JOIN Users u ON pt.playerId = u.id "
-                        + "JOIN Player p ON pt.playerId = p.id "
-                        + "WHERE pt.teamId = @teamId ";
+            string sql = "team_getPlayers";
 
             using (SqlCommand cmd = dba.GetDbCommand(sql))
             {
                 try
                 {
+                    cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@teamId", teamId).SqlDbType = SqlDbType.Int;
 
                     using (SqlDataReader reader = cmd.ExecuteReader())

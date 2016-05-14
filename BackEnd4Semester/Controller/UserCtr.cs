@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using DAO;
 using Model;
 
@@ -23,7 +19,7 @@ namespace Controller
         {
             Boolean success = false;
 
-            if(udao.CreateUser(false, username, password, firstname, lastname, email, admPri, type) != -1)
+            if(udao.CreateUser(username, password, firstname, lastname, email, admPri, type) != -1)
             {
                 success = true;
             }

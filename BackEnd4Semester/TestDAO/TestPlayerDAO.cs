@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Model;
-using DAO;
+﻿using DAO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace TestDAO
@@ -42,13 +36,14 @@ namespace TestDAO
             string fn = "UpdatedPlayer";
             string ln = "UpdatedPlayer";
             string email = "UpdatedPlayer";
+            string type = "UpdatePlayer";
             int ap = -1;
             int no = 999;
             int gp = 999;
             int g = 999;
             int p = 999;
 
-            Assert.AreNotEqual(-1, pdao.UpdatePlayer(un, pw, fn, ln, email, ap, no, gp, g, p, oldFirstname, oldLastname));
+            Assert.AreNotEqual(-1, pdao.UpdatePlayer(un, pw, fn, ln, email, type, ap, no, gp, g, p, oldFirstname, oldLastname));
         }
 
         [TestMethod]
