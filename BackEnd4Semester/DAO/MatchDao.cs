@@ -21,17 +21,22 @@ namespace DAO
 
             EventsDao eDao = new EventsDao();
 
-            int eId = eDao.CreateEvent(m.Title, m.Author, m.Date, m.Content,
-                                m.IsPublic, m.StartTime, m.EndTime, "match");
-
-            string sql = "INSERT INTO match(id, teamid, opponent, homegoals, awaygoals)" +
-                "values(@id, (select id FROM Team where name = @teamname), @opponent, @homegoals, @awaygoals)";
+            string sql = "match_insert";
             using (SqlCommand cmd = dba.GetDbCommand(sql))
             {
                 try
                 {
                     cmd.Parameters.Clear();
-                    cmd.Parameters.AddWithValue("@id", eId).SqlDbType = SqlDbType.Int;
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@title", m.Title).SqlDbType = SqlDbType.VarChar;
+                    cmd.Parameters.AddWithValue("@creatorId", m.Author.Id).SqlDbType = SqlDbType.Int;
+                    cmd.Parameters.AddWithValue("@date", m.Date).SqlDbType = SqlDbType.Date;
+                    cmd.Parameters.AddWithValue("@content", m.Content).SqlDbType = SqlDbType.VarChar;
+                    cmd.Parameters.AddWithValue("@isPublic", m.IsPublic).SqlDbType = SqlDbType.Bit;
+                    cmd.Parameters.AddWithValue("@contentType", m.ContentType).SqlDbType = SqlDbType.VarChar;
+                    cmd.Parameters.AddWithValue("@starttime", m.StartTime).SqlDbType = SqlDbType.DateTime;
+                    cmd.Parameters.AddWithValue("@endtime", m.EndTime).SqlDbType = SqlDbType.DateTime;
+                    cmd.Parameters.AddWithValue("@eventType", m.EventType).SqlDbType = SqlDbType.VarChar;
                     cmd.Parameters.AddWithValue("@teamname", m.Team.Name).SqlDbType = SqlDbType.VarChar;
                     cmd.Parameters.AddWithValue("@opponent", m.Opponent).SqlDbType = SqlDbType.VarChar;
                     cmd.Parameters.AddWithValue("@homegoals", m.HomeGoal).SqlDbType = SqlDbType.Int;

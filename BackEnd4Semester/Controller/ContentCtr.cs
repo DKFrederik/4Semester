@@ -13,10 +13,10 @@ namespace Controller
         {
             uCtr = new UserCtr();
         }
-        public Boolean CreateNews(string title, User author, DateTime date, string content, Boolean isPublic, string picture)
+        public Boolean CreateNews(string title, User author, DateTime date, string content, Boolean isPublic, string contentType, string picture)
         {
             Boolean succes = false;
-            News n = new News(title, author, date, content, isPublic, picture);
+            News n = new News(title, author, date, content, isPublic, contentType, picture);
 
             if (0 < new NewsDao().CreateNews(n))
             {
@@ -25,9 +25,9 @@ namespace Controller
             return succes;
         }
 
-        public Boolean CreateTrainingSession(string title, string authorEmail, DateTime date, string content, bool isPulic, DateTime startTime, DateTime endTime, string trainer){
+        public Boolean CreateTrainingSession(string title, string authorEmail, DateTime date, string content, bool isPulic, string contentType, DateTime startTime, DateTime endTime, string eventType, string trainer){
             User author = uCtr.FindUser(authorEmail);
-            TrainingSession newTs = new TrainingSession(title, author, date, content, isPulic, startTime, endTime, trainer);
+            TrainingSession newTs = new TrainingSession(title, author, date, content, isPulic, contentType, startTime, endTime, eventType, trainer);
             return new TrainingSessionDao().CreateTrainingSession(newTs);
         }
 
@@ -41,8 +41,8 @@ namespace Controller
             return true;
         }
 
-        public Boolean CreateMatch(string title, User author, DateTime date, string content, Boolean isPublic,
-            DateTime startTime, DateTime endTime, string opponent, int homegoals, int awaygoals, Team team)
+        public Boolean CreateMatch(string title, User author, DateTime date, string content, Boolean isPublic, string contentType,
+            DateTime startTime, DateTime endTime, string eventType, string opponent, int homegoals, int awaygoals, Team team)
         {
 
             Boolean succes = false;
@@ -54,8 +54,10 @@ namespace Controller
                 Date = date,
                 Content = content,
                 IsPublic = isPublic,
+                ContentType = contentType,
                 StartTime = startTime,
                 EndTime = endTime,
+                EventType = eventType,
                 Opponent = opponent,
                 HomeGoal = homegoals,
                 AwayGoal = awaygoals,

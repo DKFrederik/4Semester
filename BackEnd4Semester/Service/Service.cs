@@ -29,17 +29,17 @@ namespace Service
             return new UserCtr().CreateUser(username, password, firstname, lastname, email, admPri, type);
         }
 
-        public Boolean CreateNews(string title, User author, DateTime date, string content, Boolean isPublic, string picture)
+        public Boolean CreateNews(string title, User author, DateTime date, string content, Boolean isPublic, string contentType, string picture)
         {
             ContentCtr cCtr = new ContentCtr();
-            return cCtr.CreateNews(title, author, date, content, isPublic, picture);
+            return cCtr.CreateNews(title, author, date, content, isPublic, contentType, picture);
         }
 
-        public Boolean CreateMatch(string title, User author, DateTime date, string content, Boolean isPublic,
-                    DateTime startTime, DateTime endTime, string opponent, int homegoals, int awaygoals, Team team)
+        public Boolean CreateMatch(string title, User author, DateTime date, string content, Boolean isPublic, string contentType,
+                    DateTime startTime, DateTime endTime, string eventType, string opponent, int homegoals, int awaygoals, Team team)
         {
             ContentCtr cCtr = new ContentCtr();
-            return cCtr.CreateMatch(title, author, date, content, isPublic, startTime, endTime, opponent, homegoals, awaygoals, team);
+            return cCtr.CreateMatch(title, author, date, content, isPublic, contentType, startTime, endTime, eventType, opponent, homegoals, awaygoals, team);
         }
 
         public Boolean DeleteUser(string email)
@@ -57,11 +57,11 @@ namespace Service
             return new UserCtr().UpdateUser(oldFn, oldLn, username, password, firstname, lastname, email, admPri, type);
         }
 
-        public Boolean CreateTrainingSession(string title, string authorEmail, DateTime date, string content, Boolean isPublic,
-            DateTime startTime, DateTime endTime, string trainer)
+        public Boolean CreateTrainingSession(string title, string authorEmail, DateTime date, string content, Boolean isPublic, string contentType,
+            DateTime startTime, DateTime endTime, string eventType, string trainer)
         {
             ContentCtr cCtr = new ContentCtr();
-            return cCtr.CreateTrainingSession(title, authorEmail, date, content, isPublic, startTime, endTime, trainer);
+            return cCtr.CreateTrainingSession(title, authorEmail, date, content, isPublic, contentType, startTime, endTime, eventType, trainer);
         }
 
         public List<Match> FindMatches(DateTime date)
