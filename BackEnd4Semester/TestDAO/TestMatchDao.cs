@@ -19,10 +19,12 @@ namespace TestDAO
         [TestMethod]
         public void TestCreateMatch()
         {
+            UserDao ud = new UserDao();
+            User author = ud.FindUser(1);
             Match match = new Match()
             {
                 Title = "testMatch",
-                Author = new User(){Email = "ContentTestUser"},
+                Author = author,
                 Date = new DateTime(2016, 04, 20),
                 Content = "TestMatchContent",
                 IsPublic = true,

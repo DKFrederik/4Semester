@@ -37,7 +37,7 @@ namespace DAO
                     cmd.Parameters.AddWithValue("@starttime", m.StartTime).SqlDbType = SqlDbType.DateTime;
                     cmd.Parameters.AddWithValue("@endtime", m.EndTime).SqlDbType = SqlDbType.DateTime;
                     cmd.Parameters.AddWithValue("@eventType", m.EventType).SqlDbType = SqlDbType.VarChar;
-                    cmd.Parameters.AddWithValue("@teamname", m.Team.Name).SqlDbType = SqlDbType.VarChar;
+                    cmd.Parameters.AddWithValue("@teamName", m.Team.Name).SqlDbType = SqlDbType.VarChar;
                     cmd.Parameters.AddWithValue("@opponent", m.Opponent).SqlDbType = SqlDbType.VarChar;
                     cmd.Parameters.AddWithValue("@homegoals", m.HomeGoal).SqlDbType = SqlDbType.Int;
                     cmd.Parameters.AddWithValue("@awaygoals", m.AwayGoal).SqlDbType = SqlDbType.Int;

@@ -56,7 +56,7 @@ namespace DAO
 
         public ContentInfo buildPartialObject(SqlDataReader sdr, ContentInfo obj)
         {
-            UserDAO uDao = new UserDAO();
+            UserDao uDao = new UserDao();
             obj.Title = sdr.GetString("title");
             obj.Author = uDao.FindUser(sdr.GetInt32("creatorId"));
             obj.Date = sdr.GetDateTime("date");

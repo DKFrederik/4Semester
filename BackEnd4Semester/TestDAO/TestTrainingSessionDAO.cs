@@ -21,8 +21,10 @@ namespace TestDAO
         {
             TrainingSessionDao tsDao = new TrainingSessionDao();
             TrainingSession ts = new TrainingSession();
+            UserDao ud = new UserDao();
+            User author = ud.FindUser(1);
             ts.Title = "test";
-            ts.Author.Id = 1;
+            ts.Author = author;
             ts.Date = new DateTime(2016, 01, 01);
             ts.Content = "content";
             ts.IsPublic = true;

@@ -5,11 +5,11 @@ using Model;
 
 namespace DAO
 {
-    public class UserDAO
+    public class UserDao
     {
         private DBAccess dba;
 
-        public UserDAO()
+        public UserDao()
         {
             this.dba = new DBAccess();
         }

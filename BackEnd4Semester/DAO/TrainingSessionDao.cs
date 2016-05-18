@@ -55,7 +55,7 @@ namespace DAO
         {
             List<TrainingSession> tList = new List<TrainingSession>();
 
-            string sql = "SELECT * from TrainingSessionView where c.date = @date";
+            string sql = "SELECT * from TrainingSessionView where date = @date";
             using (SqlCommand cmd = dba.GetDbCommand(sql))
             {
                 cmd.Parameters.AddWithValue("@date", date).SqlDbType = SqlDbType.DateTime;
