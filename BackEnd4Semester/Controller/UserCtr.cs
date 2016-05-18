@@ -84,5 +84,10 @@ namespace Controller
         {
             return pDao.FindPlayer(email);
         }
+
+        public bool ValidateUser(string username, string password)
+        {
+            return new UserDAO().ValidateUser(username, password);
+        }
     }
 }

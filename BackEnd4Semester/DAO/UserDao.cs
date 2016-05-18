@@ -99,6 +99,34 @@ namespace DAO
             return foundUser;
         }
 
+        public bool ValidateUser(string username, string password)
+        {
+            string storedPassword = "";
+
+            string sql = "SELECT password FROM Users WHERE username=@username";
+            using (SqlCommand cmd = dba.GetDbCommand(sql))
+            {
+                cmd.Parameters.AddWithValue("@username", username).SqlDbType = SqlDbType.VarChar;
+
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    try
+                    {
+                        while (reader.Read())
+                        {
+                            storedPassword = reader.GetString("password");
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        throw e;
+                    }
+                }
+                cmd.Parameters.Clear();
+            }
+            return password.Equals(storedPassword);
+        }
+
         public int UpdateUser(User user, string oldFirstname, string oldLastname)
         {
             int rc = -1;
