@@ -26,18 +26,21 @@ namespace DAO
         public int CreateNews(News news)
         {
             int rc = -1;
-
-            int ctId = ctDao.CreateContentInfo(news.Title, news.Author, news.Date, news.Content, news.IsPublic, "news");
-
-            string sql = "INSERT INTO news(id, pictureURL)" +
-                "values(@ctId, @picture)";
+            
+            string sql = "news_insert";
             using (SqlCommand cmd = dba.GetDbCommand(sql))
             {
                 try
                 {
                     cmd.Parameters.Clear();
-                    cmd.Parameters.AddWithValue("@ctId", ctId).SqlDbType = SqlDbType.Int;
-                    cmd.Parameters.AddWithValue("@picture", news.Picture).SqlDbType = SqlDbType.VarChar;
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@title", news.Title).SqlDbType = SqlDbType.VarChar;
+                    cmd.Parameters.AddWithValue("@creatorId", news.Author.Id).SqlDbType = SqlDbType.Int;
+                    cmd.Parameters.AddWithValue("@date", news.Date).SqlDbType = SqlDbType.Date;
+                    cmd.Parameters.AddWithValue("@content", news.Content).SqlDbType = SqlDbType.VarChar;
+                    cmd.Parameters.AddWithValue("@contentType", news.ContentType).SqlDbType = SqlDbType.VarChar;
+                    cmd.Parameters.AddWithValue("@isPublic", news.IsPublic).SqlDbType = SqlDbType.Bit;
+                    cmd.Parameters.AddWithValue("@pictureURL", news.Picture).SqlDbType = SqlDbType.VarChar;
 
                     rc = cmd.ExecuteNonQuery();
                 }
@@ -54,7 +57,7 @@ namespace DAO
             News n = null;
             List<News> newsList = new List<News>();
 
-            string sql = "SELECT " + ctDao.buildContentQuery() + ", n.pictureURL FROM News n join ContentInfo c ON c.id = n.id WHERE c.date=@date";
+            string sql = "SELECT * FROM NewsView WHERE date=@date";
             using (SqlCommand cmd = dba.GetDbCommand(sql))
             {
                 cmd.Parameters.AddWithValue("@date", date).SqlDbType = SqlDbType.DateTime;

@@ -7,12 +7,12 @@ namespace TestDAO
     [TestClass]
     public class TestUserDAO
     {
-        private UserDAO udao;
+        private UserDao udao;
 
         [TestInitialize]
         public void Initialize()
         {
-            udao = new UserDAO();
+            udao = new UserDao();
         }
 
         [TestMethod]

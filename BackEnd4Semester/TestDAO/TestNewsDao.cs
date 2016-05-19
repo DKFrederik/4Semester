@@ -21,8 +21,9 @@ namespace TestDAO
         {
             News testNews = new News()
             {
-                Author = new User() { Email = "ContentTestUser" },
+                Author = new User() { Email = "ContentTestUser", Id = 1 },
                 Content = "testNews",
+                ContentType = "News",
                 Date = new DateTime(2016, 04, 20),
                 IsPublic = true,
                 Picture = "EtBilledeafCarsten.url",

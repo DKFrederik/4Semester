@@ -30,7 +30,7 @@ namespace DAO
         //public static string connectionString = @"server=CLAUS-PC\SQLEXPRESS;" +
         //                               "Trusted_Connection=True;" +
         //                               "MultipleActiveResultSets=True;" +
-        //                               "database=MarinaBooking; " +
+        //                               "database=bsi; " +
         //                               "connection timeout=10";
 
         public static string connectionString = @"server=ASUS\SQLEXPRESS;" +

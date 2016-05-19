@@ -6,12 +6,12 @@ namespace Controller
 {
     public class UserCtr
     {
-        private UserDAO udao;
+        private UserDao udao;
         private PlayerDao pDao;
 
         public UserCtr()
         {
-            udao = new UserDAO();
+            udao = new UserDao();
             pDao = new PlayerDao();
         }
 

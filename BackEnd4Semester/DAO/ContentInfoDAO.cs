@@ -14,10 +14,9 @@ namespace DAO
         {
             this.dba = new DBAccess();
         }
-        public int CreateContentInfo(string title, User author, DateTime date, string content, Boolean isPublic, string contentType) 
+        public int CreateContentInfo(string title, int creatorId, DateTime date, string content, Boolean isPublic, string contentType) 
         {
-            string sql = "INSERT INTO ContentInfo(title, creatorId, date, content, isPublic, contentType)" +
-                "values(@title, (select id FROM Users where email = @email), @date, @content, @isPublic, @contentType) SELECT SCOPE_IDENTITY()";
+            string sql = "contentInfo_insert";
 
             int maxId = -1;
             TransactionOptions options = new TransactionOptions();
@@ -28,9 +27,9 @@ namespace DAO
                 {
                     try
                     {
-                        cmd.Parameters.Clear();
+                        cmd.CommandType = CommandType.StoredProcedure;
                         cmd.Parameters.AddWithValue("@title", title).SqlDbType = SqlDbType.VarChar;
-                        cmd.Parameters.AddWithValue("@email", author.Email).SqlDbType = SqlDbType.VarChar;
+                        cmd.Parameters.AddWithValue("@creatorId", creatorId).SqlDbType = SqlDbType.Int;
                         cmd.Parameters.AddWithValue("@date", date).SqlDbType = SqlDbType.Date;
                         cmd.Parameters.AddWithValue("@content", content).SqlDbType = SqlDbType.VarChar;
                         cmd.Parameters.AddWithValue("@isPublic", isPublic).SqlDbType = SqlDbType.Bit;
@@ -57,7 +56,7 @@ namespace DAO
 
         public ContentInfo buildPartialObject(SqlDataReader sdr, ContentInfo obj)
         {
-            UserDAO uDao = new UserDAO();
+            UserDao uDao = new UserDao();
             obj.Title = sdr.GetString("title");
             obj.Author = uDao.FindUser(sdr.GetInt32("creatorId"));
             obj.Date = sdr.GetDateTime("date");

@@ -16,27 +16,29 @@ namespace DAO
             ctDao = new ContentInfoDAO();
         }
 
-        public int CreateEvent(string title, User author, DateTime date, string content, 
-                                Boolean isPublic, DateTime startTime, DateTime endTime, string eventType)
+        public int CreateEvent(Events events)
         {
             int rc = -1;    //Rowcount indicating whether or not a table was affected (nr. of rows affected)
             int ctId = -1;  //The ID returned from grandparrent ContentInfo.
 
             ContentInfoDAO ctDao = new ContentInfoDAO();
 
-            ctId = ctDao.CreateContentInfo(title, author, date, content, isPublic, "Event");
-
-            string sql = "INSERT INTO event(id, starttime, endtime, eventType)" +
-                "values(@ctId, @starttime, @endtime, @eventType)";
+            string sql = "event_insert";
             using (SqlCommand cmd = dba.GetDbCommand(sql))
             {
                 try
                 {
                     cmd.Parameters.Clear();
-                    cmd.Parameters.AddWithValue("@ctId", ctId).SqlDbType = SqlDbType.Int;
-                    cmd.Parameters.AddWithValue("@starttime", startTime).SqlDbType = SqlDbType.DateTime;
-                    cmd.Parameters.AddWithValue("@endtime", endTime).SqlDbType = SqlDbType.DateTime;
-                    cmd.Parameters.AddWithValue("@eventType", eventType).SqlDbType = SqlDbType.VarChar;
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@title", events.Title).SqlDbType = SqlDbType.VarChar;
+                    cmd.Parameters.AddWithValue("@creatorId", events.Author.Id).SqlDbType = SqlDbType.Int;
+                    cmd.Parameters.AddWithValue("@date", events.Date).SqlDbType = SqlDbType.Date;
+                    cmd.Parameters.AddWithValue("@content", events.Content).SqlDbType = SqlDbType.VarChar;
+                    cmd.Parameters.AddWithValue("@isPublic", events.IsPublic).SqlDbType = SqlDbType.Bit;
+                    cmd.Parameters.AddWithValue("@contentType", events.ContentType).SqlDbType = SqlDbType.VarChar;
+                    cmd.Parameters.AddWithValue("@starttime", events.StartTime).SqlDbType = SqlDbType.DateTime;
+                    cmd.Parameters.AddWithValue("@endtime", events.EndTime).SqlDbType = SqlDbType.DateTime;
+                    cmd.Parameters.AddWithValue("@eventType", events.EventType).SqlDbType = SqlDbType.VarChar;
 
                     rc = cmd.ExecuteNonQuery();
                 }
@@ -71,7 +73,7 @@ namespace DAO
         {
             Events foundEvent = null;
 
-            string sql = "SELECT " + ctDao.buildContentQuery() + ", e.startTime, e.endTime FROM events WHERE title=@title";
+            string sql = "SELECT * From EventView WHERE title=@title";
             using (SqlCommand cmd = dba.GetDbCommand(sql))
             {
                 cmd.Parameters.AddWithValue("@title", title).SqlDbType = SqlDbType.VarChar;

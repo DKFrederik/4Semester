@@ -19,19 +19,23 @@ namespace TestDAO
         [TestMethod]
         public void TestCreateMatch()
         {
+            UserDao ud = new UserDao();
+            User author = ud.FindUser(1);
             Match match = new Match()
             {
                 Title = "testMatch",
-                Author = new User(){Email = "ContentTestUser"},
+                Author = author,
                 Date = new DateTime(2016, 04, 20),
                 Content = "TestMatchContent",
                 IsPublic = true,
+                ContentType = "event",
                 StartTime = new DateTime(2016, 04, 20, 14, 00, 00),
                 EndTime = new DateTime(2016, 04, 20, 16, 30, 00),
+                EventType = "match",
+                Team = new Team() { Name = "MatchTestTeam" },
                 Opponent = "TestOpponent",
                 HomeGoal = 20,
-                AwayGoal = 3,
-                Team = new Team(){Name = "MatchTestTeam"}
+                AwayGoal = 3      
             };
 
             Assert.IsTrue(0 < mDao.CreateMatch(match));

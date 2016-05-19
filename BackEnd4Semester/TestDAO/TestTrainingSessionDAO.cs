@@ -21,13 +21,17 @@ namespace TestDAO
         {
             TrainingSessionDao tsDao = new TrainingSessionDao();
             TrainingSession ts = new TrainingSession();
+            UserDao ud = new UserDao();
+            User author = ud.FindUser(1);
             ts.Title = "test";
-            ts.Author = new User { Email = "ContentTestUser" };
+            ts.Author = author;
             ts.Date = new DateTime(2016, 01, 01);
             ts.Content = "content";
             ts.IsPublic = true;
+            ts.ContentType = "event";
             ts.StartTime = ts.Date = new DateTime(2016, 01, 01); ;
             ts.EndTime = ts.Date = new DateTime(2016, 01, 02); ;
+            ts.EventType = "trainingSession";
             ts.Trainer = "Claus";
 
             //Assert.IsTrue(tsDao.CreateTrainingSession(ts));

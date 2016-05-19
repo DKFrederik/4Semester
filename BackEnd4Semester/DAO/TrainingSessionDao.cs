@@ -22,18 +22,22 @@ namespace DAO
             bool success = false;
             EventsDao eDao = new EventsDao();
 
-            int eId = eDao.CreateEvent(ts.Title, ts.Author, ts.Date, ts.Content,
-                                ts.IsPublic, ts.StartTime, ts.EndTime, "trainingSession");
-
-
-            string sql = "INSERT INTO trainingSession(id, trainer)" +
-                "values(@eid, @trainer)";
+            string sql = "trainingsession_insert";
             using (SqlCommand cmd = dba.GetDbCommand(sql))
             {
                 try
                 {
                     cmd.Parameters.Clear();
-                    cmd.Parameters.AddWithValue("@eid", eId).SqlDbType = SqlDbType.Int;
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@title", ts.Title).SqlDbType = SqlDbType.VarChar;
+                    cmd.Parameters.AddWithValue("@creatorId", ts.Author.Id).SqlDbType = SqlDbType.Int;
+                    cmd.Parameters.AddWithValue("@date", ts.Date).SqlDbType = SqlDbType.Date;
+                    cmd.Parameters.AddWithValue("@content", ts.Content).SqlDbType = SqlDbType.VarChar;
+                    cmd.Parameters.AddWithValue("@isPublic", ts.IsPublic).SqlDbType = SqlDbType.Bit;
+                    cmd.Parameters.AddWithValue("@contentType", ts.ContentType).SqlDbType = SqlDbType.VarChar;
+                    cmd.Parameters.AddWithValue("@starttime", ts.StartTime).SqlDbType = SqlDbType.DateTime;
+                    cmd.Parameters.AddWithValue("@endtime", ts.EndTime).SqlDbType = SqlDbType.DateTime;
+                    cmd.Parameters.AddWithValue("@eventType", ts.EventType).SqlDbType = SqlDbType.VarChar;
                     cmd.Parameters.AddWithValue("@trainer", ts.Trainer).SqlDbType = SqlDbType.VarChar;
 
                     cmd.ExecuteNonQuery();
@@ -51,8 +55,7 @@ namespace DAO
         {
             List<TrainingSession> tList = new List<TrainingSession>();
 
-            string sql = "SELECT " + eDao.buildEventQuery() + ", t.trainer FROM trainingSession t join Event e on t.id = e.id join ContentInfo c on c.id = e.id "
-                + "where c.date = @date";
+            string sql = "SELECT * from TrainingSessionView where date = @date";
             using (SqlCommand cmd = dba.GetDbCommand(sql))
             {
                 cmd.Parameters.AddWithValue("@date", date).SqlDbType = SqlDbType.DateTime;
