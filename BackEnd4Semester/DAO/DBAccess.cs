@@ -33,11 +33,11 @@ namespace DAO
                                        "database=bsi; " +
                                        "connection timeout=10";
 
-        public static string connectionString = @"server=ASUS\SQLEXPRESS;" +
-                                       "Trusted_Connection=True;" +
-                                       "MultipleActiveResultSets=True;" +
-                                       "database=bsi; " +
-                                       "connection timeout=10";
+        //public static string connectionString = @"server=ASUS\SQLEXPRESS;" +
+        //                               "Trusted_Connection=True;" +
+        //                               "MultipleActiveResultSets=True;" +
+        //                               "database=bsi; " +
+        //                               "connection timeout=10";
 
         private SqlConnection dbconn;
 
