@@ -127,6 +127,34 @@ namespace DAO
             return password.Equals(storedPassword);
         }
 
+        public int FindUserRole(string username)
+        {
+            int role = -1;
+
+            string sql = "SELECT adminPrivilege FROM Users WHERE username=@username";
+            using (SqlCommand cmd = dba.GetDbCommand(sql))
+            {
+                cmd.Parameters.AddWithValue("@username", username).SqlDbType = SqlDbType.VarChar;
+
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    try
+                    {
+                        while (reader.Read())
+                        {
+                            role = reader.GetInt32("adminPrivilege");
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        throw e;
+                    }
+                }
+                cmd.Parameters.Clear();
+            }
+            return role;
+        }
+
         public int UpdateUser(User user, string oldFirstname, string oldLastname)
         {
             int rc = -1;

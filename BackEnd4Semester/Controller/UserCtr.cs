@@ -87,7 +87,12 @@ namespace Controller
 
         public bool ValidateUser(string username, string password)
         {
-            return new UserDAO().ValidateUser(username, password);
+            return new UserDao().ValidateUser(username, password);
+        }
+
+        public int GetUserRole(string username)
+        {
+            return new UserDao().FindUserRole(username);
         }
     }
 }

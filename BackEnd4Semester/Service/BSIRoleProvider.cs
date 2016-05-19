@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Security;
+using Controller;
 
 namespace Service
 {
@@ -11,12 +12,12 @@ namespace Service
     {
         public override string[] GetRolesForUser(string username)
         {
-            return new string[] { "Admin", "Sjov" };
+            return new string[] { new UserCtr().GetUserRole(username).ToString() };
         }
 
         public override bool IsUserInRole(string username, string roleName)
         {
-            if (GetRolesForUser(username).Contains(roleName))
+            if (GetRolesForUser(username).Contains(roleName.ToString()))
                 return true;
             else
                 return false;

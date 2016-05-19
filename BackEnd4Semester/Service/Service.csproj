@@ -51,9 +51,9 @@
     <Compile Include="BSIMembershipProvider.cs" />
     <Compile Include="BSIRoleProvider.cs" />
     <Compile Include="IBSIService.cs" />
+    <Compile Include="ISecureBSIService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="BSIService.cs" />
-    <Compile Include="TrainingSessions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
