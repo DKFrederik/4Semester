@@ -80,13 +80,13 @@ namespace Service
         }
 
 
-        public Team FindTeam(int id, Boolean retrieveAssoc)
+        public Team FindTeamWithId(int id, Boolean retrieveAssoc)
         {
 
             return new TeamCtr().GetTeam(id, retrieveAssoc);
         }
 
-        public Team FindTeam(string name, Boolean retrieveAssoc)
+        public Team FindTeamWithName(string name, Boolean retrieveAssoc)
         {
             return new TeamCtr().GetTeam(name, retrieveAssoc);
         }

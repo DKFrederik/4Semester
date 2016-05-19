@@ -46,10 +46,10 @@ namespace Service
         Boolean UpdateUser(string oldFn, string oldLn, string username, string password, string firstname, string lastname, string email, int admPri, string type);
 
         [OperationContract]
-        Team FindTeam(int id, Boolean retrieveAssoc);
+        Team FindTeamWithId(int id, Boolean retrieveAssoc);
 
         [OperationContract]
-        Team FindTeam(string name, Boolean retrieveAssoc);
+        Team FindTeamWithName(string name, Boolean retrieveAssoc);
 
     }
 }
