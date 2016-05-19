@@ -7,8 +7,14 @@ namespace Service
 {
     // NOTE: You can use the "Rename" command on the "Refactor" menu to change the interface name "IService1" in both code and config file together.
     [ServiceContract]
-    public interface IService
+    public interface IBSIService
     {
+        [OperationContract]
+        int GetRolesForUser(string username);
+
+        [OperationContract]
+        bool ValidateUser(String username, string password);
+
         [OperationContract]
         Player FindPlayer(String email);
 
@@ -49,7 +55,11 @@ namespace Service
         Team FindTeamWithId(int id, Boolean retrieveAssoc);
 
         [OperationContract]
+<<<<<<< HEAD:BackEnd4Semester/Service/IService.cs
         Team FindTeamWithName(string name, Boolean retrieveAssoc);
 
+=======
+        Team FindTeam(string name, Boolean retrieveAssoc);
+>>>>>>> master:BackEnd4Semester/Service/IBSIService.cs
     }
 }
