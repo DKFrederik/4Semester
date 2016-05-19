@@ -12,6 +12,14 @@ namespace Service
     [ServiceContract]
     public interface IService
     {
+        //This part is for Android
+        [OperationContract]
+        [WebInvoke(Method = "GET",
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Wrapped,
+            UriTemplate = "Json/{id}")]
+        string JSONData(string id);
+
         [OperationContract]
         Player FindPlayer(String email);
 

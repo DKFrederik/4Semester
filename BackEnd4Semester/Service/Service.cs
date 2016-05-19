@@ -12,6 +12,12 @@ namespace Service
     [ServiceBehavior(ConcurrencyMode=ConcurrencyMode.Multiple)]
     public class Service : IService 
     {
+        //For Android
+        public string JSONData(string id)
+        {
+            return "You requested product " + id;
+        }
+
         public Player FindPlayer(String email)
         {
             return new UserCtr().FindPlayer(email);
@@ -92,12 +98,6 @@ namespace Service
         public Team FindTeam(string name, Boolean retrieveAssoc)
         {
             return new TeamCtr().GetTeam(name, retrieveAssoc);
-        }
-
-        public Boolean CreatePlayer(string username, string password, string firstname, string lastname, string email, int adminPrivilege, string type, int number, int gamesPlayed, int goals, int penalties)
-        {
-            PlayerCtr pCtr = new PlayerCtr();
-            return pCtr.CreatePlayer(username, password, firstname, lastname, email, adminPrivilege, type, number, gamesPlayed, goals, penalties);
         }
     }
 }
