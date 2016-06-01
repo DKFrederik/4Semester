@@ -1,18 +1,32 @@
-﻿using System;
+﻿using Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.ServiceModel;
-using System.Text;
-using Model;
 using System.ServiceModel.Web;
+using System.Text;
 
 namespace Service
 {
     // NOTE: You can use the "Rename" command on the "Refactor" menu to change the interface name "IService1" in both code and config file together.
     [ServiceContract]
-    public interface IService
+    public interface IAndroidService
     {
+
+ 
+        [OperationContract]
+        string SayHelloTo(string name);
+
+        [OperationContract]
+        HelloWorldData GetHelloData(HelloWorldData helloWorldData);
+
+
+        [OperationContract]
+        String DoWork(String request);
+
+        //Not Android
+
         [OperationContract]
         Player FindPlayer(String email);
 
@@ -26,7 +40,7 @@ namespace Service
 
         [OperationContract]
         Boolean CreateNews(string title, User author, DateTime date, string content, Boolean isPublic, string picture);
-        
+
         [OperationContract]
         Boolean CreateMatch(string title, User author, DateTime date, string content, Boolean isPublic,
             DateTime startTime, DateTime endTime, string opponent, int homegoals, int awaygoals, Team team);
@@ -54,6 +68,5 @@ namespace Service
 
         //[OperationContract]
         //Team FindTeam(string name, Boolean retrieveAssoc);
-
     }
 }
