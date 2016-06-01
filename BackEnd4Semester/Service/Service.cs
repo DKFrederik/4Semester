@@ -12,7 +12,7 @@ namespace Service
     [ServiceBehavior(ConcurrencyMode=ConcurrencyMode.Multiple)]
     public class Service : IService 
     {
-        public Player FindPlayer(String email)
+        public Player FindPlayer(string email)
         {
             return new UserCtr().FindPlayer(email);
         }
@@ -83,11 +83,11 @@ namespace Service
         }
 
 
-        public Team FindTeam(int id, Boolean retrieveAssoc)
-        {
+        //public Team FindTeam(int id, Boolean retrieveAssoc)
+        //{
 
-            return new TeamCtr().GetTeam(id, retrieveAssoc);
-        }
+        //    return new TeamCtr().GetTeam(id, retrieveAssoc);
+        //}
 
         public Team FindTeam(string name, Boolean retrieveAssoc)
         {
