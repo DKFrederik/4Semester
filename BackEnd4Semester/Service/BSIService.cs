@@ -53,11 +53,11 @@ namespace Service
 
         public User FindUser(string email)
         {
-            string hostID = WindowsIdentity.GetCurrent().Name;
-            string primaryIdentity = ServiceSecurityContext.Current.PrimaryIdentity.AuthenticationType;
-            string windowsId = ServiceSecurityContext.Current.WindowsIdentity.Name;
-            string threadId = Thread.CurrentPrincipal.Identity.Name;
-            bool isAdmin = Thread.CurrentPrincipal.IsInRole("Admin");
+            //string hostID = WindowsIdentity.GetCurrent().Name;
+            //string primaryIdentity = ServiceSecurityContext.Current.PrimaryIdentity.AuthenticationType;
+            //string windowsId = ServiceSecurityContext.Current.WindowsIdentity.Name;
+            //string threadId = Thread.CurrentPrincipal.Identity.Name;
+            //bool isAdmin = Thread.CurrentPrincipal.IsInRole("Admin");
             return new UserCtr().FindUser(email);
         }
 

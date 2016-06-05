@@ -17,10 +17,20 @@ namespace Service
 
         public override bool IsUserInRole(string username, string roleName)
         {
-            if (GetRolesForUser(username).Contains(roleName.ToString()))
-                return true;
-            else
-                return false;
+            int role = new UserCtr().GetUserRole(username);
+            return Convert.ToInt32(roleName) <= role;
+
+            //if (roleName == "Admin")
+            //    return (role >= 0);
+            //else if (roleName.Equals("Member"))
+            //    return (role == 0);
+            //else
+            //    return false;
+
+            //if (GetRolesForUser(username).Contains(roleName.ToString()))
+            //    return true;
+            //else
+            //    return false;
         }
 
         public override void AddUsersToRoles(string[] usernames, string[] roleNames)
