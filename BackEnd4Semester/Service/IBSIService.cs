@@ -10,6 +10,9 @@ namespace Service
     public interface IBSIService
     {
         [OperationContract]
+        News getOneNews(DateTime date);
+
+        [OperationContract]
         int GetRolesForUser(string username);
 
         [OperationContract]

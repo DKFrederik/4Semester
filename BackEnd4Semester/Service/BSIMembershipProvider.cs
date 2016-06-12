@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.Security;
 using Controller;
+using System.Threading;
 
 namespace Service
 {
@@ -12,7 +13,12 @@ namespace Service
     {
         public override bool ValidateUser(string username, string password)
         {
-            return new UserCtr().ValidateUser(username, password);
+            if (username != null || password != null)
+            {
+                return true; // new UserCtr().ValidateUser(username, password);
+            }
+            else
+                throw new ArgumentNullException();
         }
 
         public override string ApplicationName

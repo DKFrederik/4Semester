@@ -6,6 +6,7 @@ using Controller;
 using System.Security.Permissions;
 using System.Security.Principal;
 using System.Threading;
+using System.Security.Claims;
 
 namespace Service
 {
@@ -30,9 +31,14 @@ namespace Service
 
         public Boolean CreateUser(string username, string password, string firstname, string lastname, string email, int admPri, string type)
         {
+            string hostID = WindowsIdentity.GetCurrent().Name;
+            string primaryIdentity = ServiceSecurityContext.Current.PrimaryIdentity.AuthenticationType;
+            string windowsId = ServiceSecurityContext.Current.PrimaryIdentity.Name;
+            string threadId = Thread.CurrentPrincipal.Identity.Name;
             return new UserCtr().CreateUser(username, password, firstname, lastname, email, admPri, type);
         }
 
+        [PrincipalPermission(SecurityAction.Demand, Role = "1")]
         public Boolean CreateNews(string title, User author, DateTime date, string content, Boolean isPublic, string contentType, string picture)
         {
             ContentCtr cCtr = new ContentCtr();
@@ -97,6 +103,11 @@ namespace Service
             return new TeamCtr().GetTeam(name, retrieveAssoc);
         }
 
+        public News getOneNews(DateTime date)
+        {
+            return new News("Hello", new User(), new DateTime(), "This is a new news lol", true, "news", "SomeURL");
+        }
+
         [PrincipalPermission(SecurityAction.Demand, Role = "1")]
         public Player FindPlayerSecure(String email)
         {
@@ -118,6 +129,10 @@ namespace Service
         [PrincipalPermission(SecurityAction.Demand, Role = "1")]
         public Boolean CreateUserSecure(string username, string password, string firstname, string lastname, string email, int admPri, string type)
         {
+            string hostID = WindowsIdentity.GetCurrent().Name;
+            string primaryIdentity = ServiceSecurityContext.Current.PrimaryIdentity.AuthenticationType;
+            string windowsId = ServiceSecurityContext.Current.PrimaryIdentity.Name;
+            string threadId = Thread.CurrentPrincipal.Identity.Name;
             return new UserCtr().CreateUser(username, password, firstname, lastname, email, admPri, type);
         }
 
@@ -142,14 +157,14 @@ namespace Service
             return new UserCtr().DeleteUser(email);
         }
 
-        [PrincipalPermission(SecurityAction.Demand, Role = "2")]
+        [PrincipalPermission(SecurityAction.Demand, Role = "1")]
         public User FindUserSecure(string email)
         {
-            //string hostID = WindowsIdentity.GetCurrent().Name;
-            //string primaryIdentity = ServiceSecurityContext.Current.PrimaryIdentity.AuthenticationType;
-            //string windowsId = ServiceSecurityContext.Current.WindowsIdentity.Name;
-            //string threadId = Thread.CurrentPrincipal.Identity.Name;
-            //bool isAdmin = Thread.CurrentPrincipal.IsInRole("Admin");
+            string hostID = WindowsIdentity.GetCurrent().Name;
+            string primaryIdentity = ServiceSecurityContext.Current.PrimaryIdentity.AuthenticationType;
+            string windowsId = ServiceSecurityContext.Current.PrimaryIdentity.Name;
+            string threadId = Thread.CurrentPrincipal.Identity.Name;
+           // bool isAdmin = Thread.CurrentPrincipal.IsInRole("Admin");
             return new UserCtr().FindUser(email);
         }
 
