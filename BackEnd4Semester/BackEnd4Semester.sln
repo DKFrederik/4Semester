@@ -13,26 +13,26 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service", "Service\Service.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestDAO", "TestDAO\TestDAO.csproj", "{AC212A57-A2F6-433F-96C8-4D23F329293B}"
 EndProject
-Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "HostIIS", "WebSites\HostIIS\", "{473F770E-A6CF-4F87-A87F-AE0A695FA4B4}"
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "BackEnd4SemesterIISNEWHost", "BackEnd4SemesterIISNEWHost\", "{F178E385-9F58-4FE0-9C8B-B23B8E052EA8}"
 	ProjectSection(WebsiteProperties) = preProject
 		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.5.2"
 		ProjectReferences = "{7169811b-af4e-4aa5-be40-99497df9e3c1}|Service.dll;{5007102A-5969-420E-ACF6-6A51B05AEFAE}|Controller.dll;{978A1566-042E-411F-9141-19AE2A7FECE5}|DAO.dll;{BBCCC509-F12D-4806-B15B-BE5B87AA1569}|Model.dll;"
-		Debug.AspNetCompiler.VirtualPath = "/localhost_31915"
-		Debug.AspNetCompiler.PhysicalPath = "WebSites\HostIIS\"
-		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_31915\"
+		Debug.AspNetCompiler.VirtualPath = "/localhost_7631"
+		Debug.AspNetCompiler.PhysicalPath = "BackEnd4SemesterIISNEWHost\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_7631\"
 		Debug.AspNetCompiler.Updateable = "true"
 		Debug.AspNetCompiler.ForceOverwrite = "true"
 		Debug.AspNetCompiler.FixedNames = "false"
 		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.VirtualPath = "/localhost_31915"
-		Release.AspNetCompiler.PhysicalPath = "WebSites\HostIIS\"
-		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_31915\"
+		Release.AspNetCompiler.VirtualPath = "/localhost_7631"
+		Release.AspNetCompiler.PhysicalPath = "BackEnd4SemesterIISNEWHost\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_7631\"
 		Release.AspNetCompiler.Updateable = "true"
 		Release.AspNetCompiler.ForceOverwrite = "true"
 		Release.AspNetCompiler.FixedNames = "false"
 		Release.AspNetCompiler.Debug = "False"
-		VWDPort = "31915"
-		SlnRelativePath = "WebSites\HostIIS\"
+		VWDPort = "7631"
+		SlnRelativePath = "BackEnd4SemesterIISNEWHost\"
 		DefaultWebSiteLanguage = "Visual C#"
 	EndProjectSection
 EndProject
@@ -62,10 +62,10 @@ Global
 		{AC212A57-A2F6-433F-96C8-4D23F329293B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AC212A57-A2F6-433F-96C8-4D23F329293B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AC212A57-A2F6-433F-96C8-4D23F329293B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{473F770E-A6CF-4F87-A87F-AE0A695FA4B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{473F770E-A6CF-4F87-A87F-AE0A695FA4B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{473F770E-A6CF-4F87-A87F-AE0A695FA4B4}.Release|Any CPU.ActiveCfg = Debug|Any CPU
-		{473F770E-A6CF-4F87-A87F-AE0A695FA4B4}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{F178E385-9F58-4FE0-9C8B-B23B8E052EA8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F178E385-9F58-4FE0-9C8B-B23B8E052EA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F178E385-9F58-4FE0-9C8B-B23B8E052EA8}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{F178E385-9F58-4FE0-9C8B-B23B8E052EA8}.Release|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
